@@ -10,30 +10,20 @@
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
   <script>
     tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Inter', 'sans-serif'],
-            display: ['Bebas Neue', 'sans-serif'],
-          }
-        }
-      }
+      theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'], display: ['Bebas Neue', 'sans-serif'] } } }
     }
   </script>
   <style>
     .scroll-hide { scrollbar-width: none; -ms-overflow-style: none; }
     .scroll-hide::-webkit-scrollbar { display: none; }
-
     @keyframes moonPulse {
       0%, 100% { box-shadow: 0 0 80px rgba(220,38,38,0.3), 0 0 160px rgba(220,38,38,0.12); }
       50% { box-shadow: 0 0 100px rgba(220,38,38,0.4), 0 0 200px rgba(220,38,38,0.18); }
     }
     .red-moon { animation: moonPulse 6s ease-in-out infinite; }
-
     @keyframes fall {
       0% { transform: translate(0, -10vh) rotate(0deg) scale(1); opacity: 0; }
-      8% { opacity: 0.7; }
-      85% { opacity: 0.5; }
+      8% { opacity: 0.7; } 85% { opacity: 0.5; }
       100% { transform: translate(-35vw, 110vh) rotate(540deg) scale(0.5); opacity: 0; }
     }
     .petal {
@@ -41,12 +31,9 @@
       background: radial-gradient(ellipse at 30% 30%, #ffb7c5, #ff85a2);
       animation: fall linear infinite; pointer-events: none; z-index: 2;
     }
-
     #navbar { transition: background-color 0.4s ease, backdrop-filter 0.4s ease; }
-
     .search-overlay { opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
     .search-overlay.active { opacity: 1; pointer-events: auto; }
-
     .card-shine { position: relative; overflow: hidden; }
     .card-shine::before {
       content: ''; position: absolute; top: -50%; left: -50%;
@@ -55,43 +42,14 @@
       transform: translateX(-100%); transition: transform 0.8s ease; z-index: 5;
     }
     .card-shine:hover::before { transform: translateX(100%); }
-
-    /* Video player overlay */
-    .player-overlay {
-      opacity: 0; pointer-events: none;
-      transition: opacity 0.4s ease;
-    }
-    .player-overlay.active {
-      opacity: 1; pointer-events: auto;
-    }
-
-    /* Episode row */
+    .player-overlay { opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
+    .player-overlay.active { opacity: 1; pointer-events: auto; }
     .ep-row { transition: all 0.2s ease; }
     .ep-row:hover { background-color: rgba(255,255,255,0.03); }
     .ep-row.playing { background-color: rgba(244,63,94,0.08); border-color: rgba(244,63,94,0.3) !important; }
     .ep-row.playing .ep-num { color: #f43f5e; }
-
-    /* Progress bar */
-    .progress-bar { -webkit-appearance: none; appearance: none; height: 4px; background: rgba(255,255,255,0.1); cursor: pointer; border-radius: 2px; }
-    .progress-bar::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%; background: #f43f5e; cursor: pointer; margin-top: -5px; }
-    .progress-bar::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; background: #f43f5e; cursor: pointer; border: none; }
-    .progress-bar::-webkit-slider-runnable-track { height: 4px; border-radius: 2px; }
-    .progress-bar::-moz-range-track { height: 4px; border-radius: 2px; background: rgba(255,255,255,0.1); }
-
-    /* Volume slider */
-    .vol-bar { -webkit-appearance: none; appearance: none; width: 80px; height: 4px; background: rgba(255,255,255,0.15); cursor: pointer; border-radius: 2px; }
-    .vol-bar::-webkit-slider-thumb { -webkit-appearance: none; width: 12px; height: 12px; border-radius: 50%; background: white; cursor: pointer; margin-top: -4px; }
-    .vol-bar::-moz-range-thumb { width: 12px; height: 12px; border-radius: 50%; background: white; cursor: pointer; border: none; }
-
-    /* Toast */
-    .toast {
-      transform: translateY(20px); opacity: 0; pointer-events: none;
-      transition: all 0.4s ease;
-    }
-    .toast.show {
-      transform: translateY(0); opacity: 1; pointer-events: auto;
-    }
-
+    .toast { transform: translateY(20px); opacity: 0; pointer-events: none; transition: all 0.4s ease; }
+    .toast.show { transform: translateY(0); opacity: 1; pointer-events: auto; }
     body::after {
       content: ''; position: fixed; inset: 0;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
@@ -138,10 +96,10 @@
     </div>
   </div>
 
-  <!-- ===== VIDEO PLAYER OVERLAY ===== -->
-  <div id="playerOverlay" class="player-overlay fixed inset-0 z-[55] bg-black/95 flex flex-col">
-    <!-- Player top bar -->
-    <div class="flex items-center justify-between px-4 md:px-8 py-4 flex-shrink-0">
+  <!-- ===== IFRAME VIDEO PLAYER OVERLAY ===== -->
+  <div id="playerOverlay" class="player-overlay fixed inset-0 z-[55] bg-black flex flex-col">
+    <!-- Top bar -->
+    <div class="flex items-center justify-between px-4 md:px-8 py-4 flex-shrink-0 bg-black/80 backdrop-blur-sm">
       <div class="flex items-center gap-3">
         <button onclick="closePlayer()" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors">
           <i data-lucide="arrow-left" class="w-5 h-5"></i>
@@ -152,69 +110,23 @@
         </div>
       </div>
       <div class="flex items-center gap-2">
+        <button id="prevEpBtn" onclick="playPrevEp()" class="hidden md:flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors text-sm font-medium">
+          <i data-lucide="skip-back" class="w-4 h-4"></i>
+          <span>Prev</span>
+        </button>
         <button id="nextEpBtn" onclick="playNextEp()" class="hidden md:flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors text-sm font-medium">
           <span>Next Ep</span>
           <i data-lucide="skip-forward" class="w-4 h-4"></i>
         </button>
+        <button onclick="toggleFullscreen()" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors">
+          <i data-lucide="maximize" class="w-5 h-5"></i>
+        </button>
       </div>
     </div>
 
-    <!-- Video area -->
-    <div class="flex-1 flex items-center justify-center px-4 md:px-8 pb-4 relative">
-      <div class="w-full max-w-5xl aspect-video bg-black rounded-xl overflow-hidden relative group">
-        <video id="videoPlayer" class="w-full h-full object-contain" preload="metadata">
-          <source src="" type="video/mp4">
-        </video>
-        <!-- Big play button overlay -->
-        <div id="bigPlayBtn" onclick="togglePlay()" class="absolute inset-0 flex items-center justify-center bg-black/30 cursor-pointer transition-opacity">
-          <div class="w-20 h-20 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center hover:scale-110 transition-transform">
-            <i data-lucide="play" class="w-9 h-9 text-white fill-white ml-1"></i>
-          </div>
-        </div>
-        <!-- Loading spinner -->
-        <div id="loadingSpinner" class="absolute inset-0 flex items-center justify-center bg-black/50 hidden">
-          <div class="w-10 h-10 border-3 border-white/20 border-t-rose-500 rounded-full animate-spin"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Player controls -->
-    <div class="flex-shrink-0 px-4 md:px-8 pb-6">
-      <div class="max-w-5xl mx-auto">
-        <!-- Progress -->
-        <div class="flex items-center gap-3 mb-4">
-          <span id="currentTime" class="text-xs text-zinc-400 w-12 text-right font-mono">0:00</span>
-          <input id="progressBar" type="range" min="0" max="100" value="0" class="progress-bar flex-1" oninput="seekVideo(this.value)"/>
-          <span id="duration" class="text-xs text-zinc-400 w-12 font-mono">0:00</span>
-        </div>
-        <!-- Buttons -->
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-3">
-            <button onclick="togglePlay()" class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors">
-              <i id="playPauseIcon" data-lucide="play" class="w-5 h-5 fill-white"></i>
-            </button>
-            <button onclick="skipTime(-10)" class="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors text-zinc-400">
-              <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
-            </button>
-            <button onclick="skipTime(10)" class="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors text-zinc-400">
-              <i data-lucide="rotate-cw" class="w-4 h-4"></i>
-            </button>
-            <div class="flex items-center gap-2 ml-2">
-              <button onclick="toggleMute()" class="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors text-zinc-400">
-                <i id="volIcon" data-lucide="volume-2" class="w-4 h-4"></i>
-              </button>
-              <input id="volBar" type="range" min="0" max="100" value="80" class="vol-bar hidden md:block" oninput="setVolume(this.value)"/>
-            </div>
-          </div>
-          <div class="flex items-center gap-2">
-            <button onclick="toggleSubtitles()" class="px-3 py-1.5 rounded-md text-xs font-medium text-zinc-400 hover:bg-white/10 transition-colors" id="subBtn">SUB</button>
-            <button onclick="setQuality('720')" class="px-3 py-1.5 rounded-md text-xs font-medium text-zinc-400 hover:bg-white/10 transition-colors">720p</button>
-            <button onclick="toggleFullscreen()" class="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors text-zinc-400">
-              <i data-lucide="maximize" class="w-4 h-4"></i>
-            </button>
-          </div>
-        </div>
-      </div>
+    <!-- Iframe area -->
+    <div class="flex-1 flex items-center justify-center p-0">
+      <iframe id="videoFrame" class="w-full h-full border-0" src="" allowfullscreen allow="autoplay; encrypted-media; picture-in-picture; fullscreen"></iframe>
     </div>
   </div>
 
@@ -234,7 +146,6 @@
         <i data-lucide="chevron-right" class="w-3 h-3"></i>
         <span class="text-zinc-300">Demon Slayer</span>
       </div>
-
       <div class="flex flex-col md:flex-row gap-8 md:gap-12 items-end">
         <div class="flex-shrink-0 w-[200px] md:w-[240px] rounded-xl overflow-hidden shadow-2xl shadow-black/50 ring-1 ring-white/10">
           <img src="https://picsum.photos/seed/demon-slayer-kn/480/720.jpg" alt="Demon Slayer" class="w-full aspect-[2/3] object-cover"/>
@@ -281,7 +192,7 @@
     </div>
   </section>
 
-  <!-- ===== EPISODES SECTION ===== -->
+  <!-- ===== EPISODES ===== -->
   <section class="relative py-12 md:py-20">
     <div class="max-w-7xl mx-auto px-6 md:px-12">
       <div class="flex items-center justify-between mb-8">
@@ -291,14 +202,11 @@
           <option>Oldest First</option>
         </select>
       </div>
-
-      <div id="episodeList" class="space-y-2">
-        <!-- Generated by JavaScript -->
-      </div>
+      <div id="episodeList" class="space-y-2"></div>
     </div>
   </section>
 
-  <!-- ===== OVERVIEW SECTION ===== -->
+  <!-- ===== OVERVIEW ===== -->
   <section class="relative py-12 md:py-20">
     <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[80%] h-px bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
     <div class="max-w-7xl mx-auto px-6 md:px-12">
@@ -355,46 +263,28 @@
       <h2 class="font-display text-3xl md:text-4xl tracking-wider mb-8">Characters</h2>
       <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-5">
         <div class="group cursor-pointer text-center">
-          <div class="aspect-square rounded-xl overflow-hidden mb-3 bg-zinc-900 ring-1 ring-white/5 group-hover:ring-white/10 transition-all">
-            <img src="https://picsum.photos/seed/tanjiro-char/200/200.jpg" alt="Tanjiro" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"/>
-          </div>
-          <h4 class="text-sm font-semibold">Tanjiro</h4>
-          <p class="text-xs text-zinc-500 mt-0.5">Protagonist</p>
+          <div class="aspect-square rounded-xl overflow-hidden mb-3 bg-zinc-900 ring-1 ring-white/5 group-hover:ring-white/10 transition-all"><img src="https://picsum.photos/seed/tanjiro-char/200/200.jpg" alt="Tanjiro" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"/></div>
+          <h4 class="text-sm font-semibold">Tanjiro</h4><p class="text-xs text-zinc-500 mt-0.5">Protagonist</p>
         </div>
         <div class="group cursor-pointer text-center">
-          <div class="aspect-square rounded-xl overflow-hidden mb-3 bg-zinc-900 ring-1 ring-white/5 group-hover:ring-white/10 transition-all">
-            <img src="https://picsum.photos/seed/nezuko-char/200/200.jpg" alt="Nezuko" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"/>
-          </div>
-          <h4 class="text-sm font-semibold">Nezuko</h4>
-          <p class="text-xs text-zinc-500 mt-0.5">Supporting</p>
+          <div class="aspect-square rounded-xl overflow-hidden mb-3 bg-zinc-900 ring-1 ring-white/5 group-hover:ring-white/10 transition-all"><img src="https://picsum.photos/seed/nezuko-char/200/200.jpg" alt="Nezuko" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"/></div>
+          <h4 class="text-sm font-semibold">Nezuko</h4><p class="text-xs text-zinc-500 mt-0.5">Supporting</p>
         </div>
         <div class="group cursor-pointer text-center">
-          <div class="aspect-square rounded-xl overflow-hidden mb-3 bg-zinc-900 ring-1 ring-white/5 group-hover:ring-white/10 transition-all">
-            <img src="https://picsum.photos/seed/zenitsu-char/200/200.jpg" alt="Zenitsu" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"/>
-          </div>
-          <h4 class="text-sm font-semibold">Zenitsu</h4>
-          <p class="text-xs text-zinc-500 mt-0.5">Supporting</p>
+          <div class="aspect-square rounded-xl overflow-hidden mb-3 bg-zinc-900 ring-1 ring-white/5 group-hover:ring-white/10 transition-all"><img src="https://picsum.photos/seed/zenitsu-char/200/200.jpg" alt="Zenitsu" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"/></div>
+          <h4 class="text-sm font-semibold">Zenitsu</h4><p class="text-xs text-zinc-500 mt-0.5">Supporting</p>
         </div>
         <div class="group cursor-pointer text-center">
-          <div class="aspect-square rounded-xl overflow-hidden mb-3 bg-zinc-900 ring-1 ring-white/5 group-hover:ring-white/10 transition-all">
-            <img src="https://picsum.photos/seed/inosuke-char/200/200.jpg" alt="Inosuke" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"/>
-          </div>
-          <h4 class="text-sm font-semibold">Inosuke</h4>
-          <p class="text-xs text-zinc-500 mt-0.5">Supporting</p>
+          <div class="aspect-square rounded-xl overflow-hidden mb-3 bg-zinc-900 ring-1 ring-white/5 group-hover:ring-white/10 transition-all"><img src="https://picsum.photos/seed/inosuke-char/200/200.jpg" alt="Inosuke" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"/></div>
+          <h4 class="text-sm font-semibold">Inosuke</h4><p class="text-xs text-zinc-500 mt-0.5">Supporting</p>
         </div>
         <div class="group cursor-pointer text-center">
-          <div class="aspect-square rounded-xl overflow-hidden mb-3 bg-zinc-900 ring-1 ring-white/5 group-hover:ring-white/10 transition-all">
-            <img src="https://picsum.photos/seed/giyu-char/200/200.jpg" alt="Giyu" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"/>
-          </div>
-          <h4 class="text-sm font-semibold">Giyu</h4>
-          <p class="text-xs text-zinc-500 mt-0.5">Supporting</p>
+          <div class="aspect-square rounded-xl overflow-hidden mb-3 bg-zinc-900 ring-1 ring-white/5 group-hover:ring-white/10 transition-all"><img src="https://picsum.photos/seed/giyu-char/200/200.jpg" alt="Giyu" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"/></div>
+          <h4 class="text-sm font-semibold">Giyu</h4><p class="text-xs text-zinc-500 mt-0.5">Supporting</p>
         </div>
         <div class="group cursor-pointer text-center">
-          <div class="aspect-square rounded-xl overflow-hidden mb-3 bg-zinc-900 ring-1 ring-white/5 group-hover:ring-white/10 transition-all">
-            <img src="https://picsum.photos/seed/muzan-char/200/200.jpg" alt="Muzan" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"/>
-          </div>
-          <h4 class="text-sm font-semibold">Muzan</h4>
-          <p class="text-xs text-zinc-500 mt-0.5">Antagonist</p>
+          <div class="aspect-square rounded-xl overflow-hidden mb-3 bg-zinc-900 ring-1 ring-white/5 group-hover:ring-white/10 transition-all"><img src="https://picsum.photos/seed/muzan-char/200/200.jpg" alt="Muzan" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"/></div>
+          <h4 class="text-sm font-semibold">Muzan</h4><p class="text-xs text-zinc-500 mt-0.5">Antagonist</p>
         </div>
       </div>
     </div>
@@ -404,12 +294,7 @@
   <footer class="relative border-t border-white/5 pt-12 pb-8">
     <div class="max-w-7xl mx-auto px-6 md:px-12">
       <div class="flex flex-col md:flex-row items-center justify-between gap-4">
-        <a href="index.html" class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-lg bg-rose-600 flex items-center justify-center">
-            <i data-lucide="play" class="w-3.5 h-3.5 text-white fill-white"></i>
-          </div>
-          <span class="font-display text-xl tracking-wider">ANIME SEKAI</span>
-        </a>
+        <a href="index.html" class="flex items-center gap-3"><div class="w-8 h-8 rounded-lg bg-rose-600 flex items-center justify-center"><i data-lucide="play" class="w-3.5 h-3.5 text-white fill-white"></i></div><span class="font-display text-xl tracking-wider">ANIME SEKAI</span></a>
         <p class="text-xs text-zinc-600">&copy; 2025 Anime Sekai. All rights reserved.</p>
       </div>
     </div>
@@ -425,262 +310,191 @@
   <script>
     lucide.createIcons();
 
-    // ===== EPISODE DATA =====
+    // ============================================
+    // EPISODE DATA
+    // ============================================
     const episodes = [
-      { num: 1,  title: "Cruelty",              duration: "23:40", date: "Apr 6, 2025" },
-      { num: 2,  title: "Trainer Sakonji Urokodaki", duration: "23:40", date: "Apr 13, 2025" },
-      { num: 3,  title: "Sabito and Makomo",    duration: "23:40", date: "Apr 20, 2025" },
-      { num: 4,  title: "Final Selection",      duration: "23:40", date: "Apr 27, 2025" },
-      { num: 5,  title: "My Own Steel",         duration: "23:40", date: "May 4, 2025" },
-      { num: 6,  title: "Swordsman Accompanying a Demon", duration: "23:40", date: "May 11, 2025" },
-      { num: 7,  title: "Muzan Kibutsuji",      duration: "23:40", date: "May 18, 2025" },
-      { num: 8,  title: "The Smell of Enchanting Blood", duration: "23:40", date: "May 25, 2025" },
-      { num: 9,  title: "Temari Demon and Arrow Demon", duration: "23:40", date: "Jun 1, 2025" },
-      { num: 10, title: "Together Forever",      duration: "23:40", date: "Jun 8, 2025" },
-      { num: 11, title: "Tsuzumi Mansion",        duration: "23:40", date: "Jun 15, 2025" },
-      { num: 12, title: "The Boar Bares Its Fangs, Zenitsu Sleeps", duration: "23:40", date: "Jun 22, 2025" },
-      { num: 13, title: "Something More Important Than Life", duration: "23:40", date: "Jun 29, 2025" },
-      { num: 14, title: "The House with the Wisteria Family Crest", duration: "23:40", date: "Jul 6, 2025" },
-      { num: 15, title: "Mount Natagumo",         duration: "23:40", date: "Jul 13, 2025" },
-      { num: 16, title: "Letting Someone Else Go First", duration: "23:40", date: "Jul 20, 2025" },
-      { num: 17, title: "You Must Master a Single Thing", duration: "23:40", date: "Jul 27, 2025" },
-      { num: 18, title: "A Forged Bond",          duration: "23:40", date: "Aug 3, 2025" },
-      { num: 19, title: "Hinokami",               duration: "23:40", date: "Aug 10, 2025" },
-      { num: 20, title: "Pretend Family",         duration: "23:40", date: "Aug 17, 2025" },
-      { num: 21, title: "Against Corps Rules",    duration: "23:40", date: "Aug 24, 2025" },
-      { num: 22, title: "Master of the Mansion",  duration: "23:40", date: "Aug 31, 2025" },
-      { num: 23, title: "Hashira Meeting",        duration: "23:40", date: "Sep 7, 2025" },
-      { num: 24, title: "Rehabilitation Training", duration: "23:40", date: "Sep 14, 2025" },
-      { num: 25, title: "Tsuguko, Kanao Tsuyuri", duration: "23:40", date: "Sep 21, 2025" },
-      { num: 26, title: "New Mission",            duration: "23:40", date: "Sep 28, 2025" },
+      { num: 1,  title: "Cruelty",                                    duration: "23:40", date: "Apr 6, 2025" },
+      { num: 2,  title: "Trainer Sakonji Urokodaki",                  duration: "23:40", date: "Apr 13, 2025" },
+      { num: 3,  title: "Sabito and Makomo",                           duration: "23:40", date: "Apr 20, 2025" },
+      { num: 4,  title: "Final Selection",                             duration: "23:40", date: "Apr 27, 2025" },
+      { num: 5,  title: "My Own Steel",                                duration: "23:40", date: "May 4, 2025" },
+      { num: 6,  title: "Swordsman Accompanying a Demon",              duration: "23:40", date: "May 11, 2025" },
+      { num: 7,  title: "Muzan Kibutsuji",                             duration: "23:40", date: "May 18, 2025" },
+      { num: 8,  title: "The Smell of Enchanting Blood",               duration: "23:40", date: "May 25, 2025" },
+      { num: 9,  title: "Temari Demon and Arrow Demon",                duration: "23:40", date: "Jun 1, 2025" },
+      { num: 10, title: "Together Forever",                            duration: "23:40", date: "Jun 8, 2025" },
+      { num: 11, title: "Tsuzumi Mansion",                             duration: "23:40", date: "Jun 15, 2025" },
+      { num: 12, title: "The Boar Bares Its Fangs, Zenitsu Sleeps",    duration: "23:40", date: "Jun 22, 2025" },
+      { num: 13, title: "Something More Important Than Life",          duration: "23:40", date: "Jun 29, 2025" },
+      { num: 14, title: "The House with the Wisteria Family Crest",     duration: "23:40", date: "Jul 6, 2025" },
+      { num: 15, title: "Mount Natagumo",                              duration: "23:40", date: "Jul 13, 2025" },
+      { num: 16, title: "Letting Someone Else Go First",               duration: "23:40", date: "Jul 20, 2025" },
+      { num: 17, title: "You Must Master a Single Thing",              duration: "23:40", date: "Jul 27, 2025" },
+      { num: 18, title: "A Forged Bond",                               duration: "23:40", date: "Aug 3, 2025" },
+      { num: 19, title: "Hinokami",                                    duration: "23:40", date: "Aug 10, 2025" },
+      { num: 20, title: "Pretend Family",                              duration: "23:40", date: "Aug 17, 2025" },
+      { num: 21, title: "Against Corps Rules",                         duration: "23:40", date: "Aug 24, 2025" },
+      { num: 22, title: "Master of the Mansion",                       duration: "23:40", date: "Aug 31, 2025" },
+      { num: 23, title: "Hashira Meeting",                             duration: "23:40", date: "Sep 7, 2025" },
+      { num: 24, title: "Rehabilitation Training",                     duration: "23:40", date: "Sep 14, 2025" },
+      { num: 25, title: "Tsuguko, Kanao Tsuyuri",                     duration: "23:40", date: "Sep 21, 2025" },
+      { num: 26, title: "New Mission",                                 duration: "23:40", date: "Sep 28, 2025" }
     ];
 
-    // ===== GENERATE EPISODE LIST =====
+    // ============================================
+    // EMBED URLs — PASTE YOUR URLS HERE
+    // ============================================
+    // For YouTube:  https://www.youtube.com/embed/VIDEO_ID?autoplay=1&rel=0
+    // For other:    https://your-embed-url.com/player?video=xxx&autoplay=1
+    // ============================================
+    const embedUrls = {
+      1:  "PASTE_EMBED_URL_EPISODE_1_HERE",
+      2:  "PASTE_EMBED_URL_EPISODE_2_HERE",
+      3:  "PASTE_EMBED_URL_EPISODE_3_HERE",
+      4:  "PASTE_EMBED_URL_EPISODE_4_HERE",
+      5:  "PASTE_EMBED_URL_EPISODE_5_HERE",
+      6:  "PASTE_EMBED_URL_EPISODE_6_HERE",
+      7:  "PASTE_EMBED_URL_EPISODE_7_HERE",
+      8:  "PASTE_EMBED_URL_EPISODE_8_HERE",
+      9:  "PASTE_EMBED_URL_EPISODE_9_HERE",
+      10: "PASTE_EMBED_URL_EPISODE_10_HERE",
+      11: "PASTE_EMBED_URL_EPISODE_11_HERE",
+      12: "PASTE_EMBED_URL_EPISODE_12_HERE",
+      13: "PASTE_EMBED_URL_EPISODE_13_HERE",
+      14: "PASTE_EMBED_URL_EPISODE_14_HERE",
+      15: "PASTE_EMBED_URL_EPISODE_15_HERE",
+      16: "PASTE_EMBED_URL_EPISODE_16_HERE",
+      17: "PASTE_EMBED_URL_EPISODE_17_HERE",
+      18: "PASTE_EMBED_URL_EPISODE_18_HERE",
+      19: "PASTE_EMBED_URL_EPISODE_19_HERE",
+      20: "PASTE_EMBED_URL_EPISODE_20_HERE",
+      21: "PASTE_EMBED_URL_EPISODE_21_HERE",
+      22: "PASTE_EMBED_URL_EPISODE_22_HERE",
+      23: "PASTE_EMBED_URL_EPISODE_23_HERE",
+      24: "PASTE_EMBED_URL_EPISODE_24_HERE",
+      25: "PASTE_EMBED_URL_EPISODE_25_HERE",
+      26: "PASTE_EMBED_URL_EPISODE_26_HERE"
+    };
+
+    // ============================================
+    // GENERATE EPISODE LIST
+    // ============================================
     const episodeList = document.getElementById('episodeList');
     let currentEp = 0;
 
-    episodes.forEach((ep, index) => {
+    episodes.forEach(function(ep) {
       const row = document.createElement('div');
       row.className = 'ep-row flex items-center gap-4 md:gap-6 p-4 rounded-xl cursor-pointer border border-transparent';
-      row.id = `ep-row-${ep.num}`;
-      row.onclick = () => playEpisode(ep.num);
-      row.innerHTML = `
-        <span class="ep-num text-sm font-bold text-zinc-600 w-8 text-right flex-shrink-0 transition-colors">${String(ep.num).padStart(2, '0')}</span>
-        <div class="w-28 md:w-40 aspect-video rounded-lg overflow-hidden bg-zinc-900 flex-shrink-0 relative">
-          <img src="https://picsum.photos/seed/ds-ep${ep.num}/320/180.jpg" alt="EP ${ep.num}" class="w-full h-full object-cover opacity-70 hover:opacity-100 transition-opacity" loading="lazy"/>
-          <div class="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity bg-black/30">
-            <i data-lucide="play" class="w-5 h-5 text-white fill-white"></i>
-          </div>
-        </div>
-        <div class="flex-1 min-w-0 hidden md:block">
-          <h4 class="text-sm font-semibold truncate">Episode ${ep.num} — ${ep.title}</h4>
-          <p class="text-xs text-zinc-500 mt-0.5">${ep.duration} &bull; ${ep.date}</p>
-        </div>
-        <div class="flex items-center gap-3 flex-shrink-0">
-          <span class="text-xs text-zinc-600 md:hidden">${ep.duration}</span>
-          <i data-lucide="play-circle" class="w-6 h-6 text-zinc-700 hover:text-rose-500 transition-colors"></i>
-        </div>
-      `;
+      row.id = 'ep-row-' + ep.num;
+      row.onclick = function() { playEpisode(ep.num); };
+      row.innerHTML =
+        '<span class="ep-num text-sm font-bold text-zinc-600 w-8 text-right flex-shrink-0 transition-colors">' + String(ep.num).padStart(2, '0') + '</span>' +
+        '<div class="w-28 md:w-40 aspect-video rounded-lg overflow-hidden bg-zinc-900 flex-shrink-0 relative">' +
+          '<img src="https://picsum.photos/seed/ds-ep' + ep.num + '/320/180.jpg" alt="EP ' + ep.num + '" class="w-full h-full object-cover opacity-70" loading="lazy"/>' +
+          '<div class="absolute inset-0 flex items-center justify-center bg-black/30 opacity-0 hover:opacity-100 transition-opacity">' +
+            '<i data-lucide="play" class="w-5 h-5 text-white fill-white"></i>' +
+          '</div>' +
+        '</div>' +
+        '<div class="flex-1 min-w-0 hidden md:block">' +
+          '<h4 class="text-sm font-semibold truncate">Episode ' + ep.num + ' — ' + ep.title + '</h4>' +
+          '<p class="text-xs text-zinc-500 mt-0.5">' + ep.duration + ' &bull; ' + ep.date + '</p>' +
+        '</div>' +
+        '<div class="flex items-center gap-3 flex-shrink-0">' +
+          '<span class="text-xs text-zinc-600 md:hidden">' + ep.duration + '</span>' +
+          '<i data-lucide="play-circle" class="w-6 h-6 text-zinc-700"></i>' +
+        '</div>';
       episodeList.appendChild(row);
     });
 
     lucide.createIcons();
 
-    // ===== VIDEO PLAYER LOGIC =====
-    const video = document.getElementById('videoPlayer');
+    // ============================================
+    // PLAYER ELEMENTS
+    // ============================================
     const playerOverlay = document.getElementById('playerOverlay');
-    const bigPlayBtn = document.getElementById('bigPlayBtn');
-    const loadingSpinner = document.getElementById('loadingSpinner');
-    const progressBar = document.getElementById('progressBar');
-    const currentTimeEl = document.getElementById('currentTime');
-    const durationEl = document.getElementById('duration');
-    const volBar = document.getElementById('volBar');
+    const videoFrame = document.getElementById('videoFrame');
 
-    // Sample video — replace with real anime video URLs
-    const sampleVideo = 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
-
+    // ============================================
+    // PLAY EPISODE
+    // ============================================
     function playEpisode(epNum) {
       currentEp = epNum - 1;
       const ep = episodes[currentEp];
 
-      // Update UI
-      document.getElementById('playerEpTitle').textContent = `Episode ${ep.num} — ${ep.title}`;
+      // Update title
+      document.getElementById('playerEpTitle').textContent = 'Episode ' + ep.num + ' — ' + ep.title;
 
-      // Highlight active episode row
-      document.querySelectorAll('.ep-row').forEach(r => r.classList.remove('playing'));
-      const activeRow = document.getElementById(`ep-row-${ep.num}`);
+      // Highlight active row
+      var allRows = document.querySelectorAll('.ep-row');
+      for (var i = 0; i < allRows.length; i++) { allRows[i].classList.remove('playing'); }
+      var activeRow = document.getElementById('ep-row-' + ep.num);
       if (activeRow) activeRow.classList.add('playing');
 
-      // Set video source — replace sampleVideo with your real video URL
-      video.src = sampleVideo;
-      video.load();
+      // Set iframe source
+      var url = embedUrls[epNum] || '';
+      if (url && url.indexOf('?') !== -1) {
+        videoFrame.src = url + '&autoplay=1';
+      } else if (url && url !== '') {
+        videoFrame.src = url + '?autoplay=1';
+      } else {
+        videoFrame.src = '';
+      }
 
       // Show player
       playerOverlay.classList.add('active');
       document.body.style.overflow = 'hidden';
-      bigPlayBtn.style.opacity = '1';
-      loadingSpinner.classList.remove('hidden');
 
-      // Auto play
-      video.play().then(() => {
-        bigPlayBtn.style.opacity = '0';
-        loadingSpinner.classList.add('hidden');
-        updatePlayPauseIcon();
-      }).catch(() => {
-        loadingSpinner.classList.add('hidden');
-        bigPlayBtn.style.opacity = '1';
-      });
+      // Show/hide prev and next buttons
+      var prevBtn = document.getElementById('prevEpBtn');
+      var nextBtn = document.getElementById('nextEpBtn');
+      prevBtn.style.display = epNum > 1 ? 'flex' : 'none';
+      nextBtn.style.display = epNum < episodes.length ? 'flex' : 'none';
 
-      // Show/hide next button
-      const nextBtn = document.getElementById('nextEpBtn');
-      if (epNum < episodes.length) {
-        nextBtn.style.display = 'flex';
-      } else {
-        nextBtn.style.display = 'none';
-      }
-
-      // Scroll to episode row
-      if (activeRow) {
-        activeRow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      }
+      // Scroll to active row
+      if (activeRow) activeRow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
+    // ============================================
+    // CLOSE PLAYER
+    // ============================================
     function closePlayer() {
-      video.pause();
+      videoFrame.src = '';
       playerOverlay.classList.remove('active');
       document.body.style.overflow = '';
     }
 
-    function togglePlay() {
-      if (video.paused) {
-        video.play();
-        bigPlayBtn.style.opacity = '0';
-      } else {
-        video.pause();
-        bigPlayBtn.style.opacity = '1';
-      }
-      updatePlayPauseIcon();
+    // ============================================
+    // NEXT / PREV EPISODE
+    // ============================================
+    function playNextEp() {
+      if (currentEp < episodes.length - 1) playEpisode(currentEp + 2);
     }
 
-    function updatePlayPauseIcon() {
-      const icon = document.getElementById('playPauseIcon');
-      if (video.paused) {
-        icon.setAttribute('data-lucide', 'play');
-      } else {
-        icon.setAttribute('data-lucide', 'pause');
-      }
-      lucide.createIcons();
+    function playPrevEp() {
+      if (currentEp > 0) playEpisode(currentEp);
     }
 
-    function skipTime(seconds) {
-      video.currentTime = Math.max(0, Math.min(video.duration || 0, video.currentTime + seconds));
-    }
-
-    function seekVideo(value) {
-      if (video.duration) {
-        video.currentTime = (value / 100) * video.duration;
-      }
-    }
-
-    function setVolume(value) {
-      video.volume = value / 100;
-      updateVolIcon();
-    }
-
-    function toggleMute() {
-      video.muted = !video.muted;
-      if (video.muted) {
-        volBar.value = 0;
-      } else {
-        volBar.value = video.volume * 100;
-      }
-      updateVolIcon();
-    }
-
-    function updateVolIcon() {
-      const icon = document.getElementById('volIcon');
-      if (video.muted || video.volume === 0) {
-        icon.setAttribute('data-lucide', 'volume-x');
-      } else if (video.volume < 0.5) {
-        icon.setAttribute('data-lucide', 'volume-1');
-      } else {
-        icon.setAttribute('data-lucide', 'volume-2');
-      }
-      lucide.createIcons();
-    }
-
-    function toggleSubtitles() {
-      const btn = document.getElementById('subBtn');
-      if (video.textTracks.length > 0) {
-        const track = video.textTracks[0];
-        track.mode = track.mode === 'showing' ? 'hidden' : 'showing';
-        btn.classList.toggle('text-rose-400');
-        btn.classList.toggle('text-zinc-400');
-      } else {
-        showToast('Subtitles not available for this source');
-      }
-    }
-
-    function setQuality(q) {
-      showToast(`Switched to ${q} (requires video source support)`);
-    }
-
+    // ============================================
+    // FULLSCREEN
+    // ============================================
     function toggleFullscreen() {
-      const container = video.closest('.aspect-video');
       if (document.fullscreenElement) {
         document.exitFullscreen();
       } else {
-        container.requestFullscreen().catch(() => {});
+        playerOverlay.requestFullscreen().catch(function() {});
       }
     }
 
-    function playNextEp() {
-      if (currentEp < episodes.length - 1) {
-        playEpisode(currentEp + 2); // +2 because epNum = currentEp + 1
-      }
-    }
-
-    // Video events
-    video.addEventListener('timeupdate', () => {
-      if (video.duration) {
-        const pct = (video.currentTime / video.duration) * 100;
-        progressBar.value = pct;
-        currentTimeEl.textContent = formatTime(video.currentTime);
-        durationEl.textContent = formatTime(video.duration);
-      }
-    });
-
-    video.addEventListener('ended', () => {
-      if (currentEp < episodes.length - 1) {
-        playNextEp();
-      } else {
-        bigPlayBtn.style.opacity = '1';
-        updatePlayPauseIcon();
-        showToast('You\'ve watched all episodes!');
-      }
-    });
-
-    video.addEventListener('waiting', () => { loadingSpinner.classList.remove('hidden'); });
-    video.addEventListener('playing', () => { loadingSpinner.classList.add('hidden'); bigPlayBtn.style.opacity = '0'; });
-    video.addEventListener('pause', () => { bigPlayBtn.style.opacity = '1'; updatePlayPauseIcon(); });
-
-    // Set initial volume
-    video.volume = 0.8;
-
-    function formatTime(s) {
-      if (isNaN(s)) return '0:00';
-      const m = Math.floor(s / 60);
-      const sec = Math.floor(s % 60);
-      return `${m}:${String(sec).padStart(2, '0')}`;
-    }
-
-    // ===== MY LIST TOGGLE =====
-    let inList = false;
+    // ============================================
+    // MY LIST
+    // ============================================
+    var inList = false;
     function toggleMyList() {
       inList = !inList;
-      const icon = document.getElementById('listIcon');
-      const text = document.getElementById('listText');
-      const btn = document.getElementById('addListBtn');
+      var icon = document.getElementById('listIcon');
+      var text = document.getElementById('listText');
+      var btn = document.getElementById('addListBtn');
       if (inList) {
         icon.setAttribute('data-lucide', 'check');
         text.textContent = 'Added!';
@@ -697,26 +511,30 @@
       lucide.createIcons();
     }
 
-    // ===== COPY LINK =====
+    // ============================================
+    // COPY LINK
+    // ============================================
     function copyLink() {
-      navigator.clipboard.writeText(window.location.href).then(() => {
+      navigator.clipboard.writeText(window.location.href).then(function() {
         showToast('Link copied to clipboard!');
-      }).catch(() => {
-        showToast('Link copied!');
-      });
+      }).catch(function() { showToast('Link copied!'); });
     }
 
-    // ===== TOAST =====
+    // ============================================
+    // TOAST
+    // ============================================
     function showToast(msg) {
-      const toast = document.getElementById('toast');
+      var toast = document.getElementById('toast');
       document.getElementById('toastMsg').textContent = msg;
       toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 2500);
+      setTimeout(function() { toast.classList.remove('show'); }, 2500);
     }
 
-    // ===== NAVBAR SCROLL =====
-    const navbar = document.getElementById('navbar');
-    window.addEventListener('scroll', () => {
+    // ============================================
+    // NAVBAR SCROLL
+    // ============================================
+    var navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', function() {
       if (window.scrollY > 60) {
         navbar.style.backgroundColor = 'rgba(10,10,18,0.85)';
         navbar.style.backdropFilter = 'blur(20px)';
@@ -728,64 +546,35 @@
       }
     });
 
-    // ===== SEARCH =====
-    document.getElementById('searchBtn').addEventListener('click', () => {
+    // ============================================
+    // SEARCH
+    // ============================================
+    document.getElementById('searchBtn').addEventListener('click', function() {
       document.getElementById('searchOverlay').classList.add('active');
     });
 
-    // ===== PETALS =====
-    const petalsContainer = document.getElementById('petals-container');
-    for (let i = 0; i < 15; i++) {
-      const petal = document.createElement('div');
+    // ============================================
+    // PETALS
+    // ============================================
+    var petalsContainer = document.getElementById('petals-container');
+    for (var p = 0; p < 15; p++) {
+      var petal = document.createElement('div');
       petal.className = 'petal';
-      const size = Math.random() * 8 + 5;
-      petal.style.cssText = `left:${Math.random()*100+10}%;width:${size}px;height:${size}px;animation-duration:${Math.random()*6+9}s;animation-delay:${Math.random()*12}s;opacity:${Math.random()*0.4+0.1};`;
+      var size = Math.random() * 8 + 5;
+      petal.style.cssText = 'left:' + (Math.random()*100+10) + '%;width:' + size + 'px;height:' + size + 'px;animation-duration:' + (Math.random()*6+9) + 's;animation-delay:' + (Math.random()*12) + 's;opacity:' + (Math.random()*0.4+0.1) + ';';
       petalsContainer.appendChild(petal);
     }
 
-    // ===== KEYBOARD SHORTCUTS =====
-    document.addEventListener('keydown', (e) => {
-      // Only work when player is open
+    // ============================================
+    // KEYBOARD SHORTCUTS
+    // ============================================
+    document.addEventListener('keydown', function(e) {
       if (!playerOverlay.classList.contains('active')) return;
-
-      switch(e.key) {
-        case ' ':
-        case 'k':
-          e.preventDefault();
-          togglePlay();
-          break;
-        case 'ArrowLeft':
-          e.preventDefault();
-          skipTime(-10);
-          break;
-        case 'ArrowRight':
-          e.preventDefault();
-          skipTime(10);
-          break;
-        case 'ArrowUp':
-          e.preventDefault();
-          video.volume = Math.min(1, video.volume + 0.1);
-          volBar.value = video.volume * 100;
-          updateVolIcon();
-          break;
-        case 'ArrowDown':
-          e.preventDefault();
-          video.volume = Math.max(0, video.volume - 0.1);
-          volBar.value = video.volume * 100;
-          updateVolIcon();
-          break;
-        case 'f':
-          toggleFullscreen();
-          break;
-        case 'm':
-          toggleMute();
-          break;
-        case 'Escape':
-          closePlayer();
-          break;
-        case 'n':
-          playNextEp();
-          break;
+      switch (e.key) {
+        case 'Escape': closePlayer(); break;
+        case 'n': playNextEp(); break;
+        case 'p': playPrevEp(); break;
+        case 'f': toggleFullscreen(); break;
       }
     });
   </script>
