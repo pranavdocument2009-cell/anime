@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Anime Detail — ANIME SEKAI</title>
+  <title>Demon Slayer — ANIME SEKAI</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -37,47 +37,9 @@
       100% { transform: translate(-35vw, 110vh) rotate(540deg) scale(0.5); opacity: 0; }
     }
     .petal {
-      position: absolute;
-      border-radius: 50% 0 50% 0;
+      position: absolute; border-radius: 50% 0 50% 0;
       background: radial-gradient(ellipse at 30% 30%, #ffb7c5, #ff85a2);
-      animation: fall linear infinite;
-      pointer-events: none;
-      z-index: 2;
-    }
-
-    .reveal {
-      opacity: 0;
-      transform: translateY(40px);
-      transition: opacity 0.9s cubic-bezier(0.25,1,0.5,1), transform 0.9s cubic-bezier(0.25,1,0.5,1);
-    }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
-
-    body::after {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
-      opacity: 0.025;
-      pointer-events: none;
-      z-index: 9999;
-    }
-
-    .card-shine { position: relative; overflow: hidden; }
-    .card-shine::before {
-      content: '';
-      position: absolute;
-      top: -50%; left: -50%;
-      width: 200%; height: 200%;
-      background: linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.05) 50%, transparent 60%);
-      transform: translateX(-100%);
-      transition: transform 0.8s ease;
-      z-index: 5;
-    }
-    .card-shine:hover::before { transform: translateX(100%); }
-
-    .genre-pattern {
-      background-image: radial-gradient(circle at 20% 80%, rgba(255,255,255,0.08) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.05) 0%, transparent 50%);
+      animation: fall linear infinite; pointer-events: none; z-index: 2;
     }
 
     #navbar { transition: background-color 0.4s ease, backdrop-filter 0.4s ease; }
@@ -85,18 +47,56 @@
     .search-overlay { opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
     .search-overlay.active { opacity: 1; pointer-events: auto; }
 
-    /* Episode list row hover */
-    .ep-row { transition: background-color 0.2s ease; }
+    .card-shine { position: relative; overflow: hidden; }
+    .card-shine::before {
+      content: ''; position: absolute; top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.05) 50%, transparent 60%);
+      transform: translateX(-100%); transition: transform 0.8s ease; z-index: 5;
+    }
+    .card-shine:hover::before { transform: translateX(100%); }
+
+    /* Video player overlay */
+    .player-overlay {
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+    .player-overlay.active {
+      opacity: 1; pointer-events: auto;
+    }
+
+    /* Episode row */
+    .ep-row { transition: all 0.2s ease; }
     .ep-row:hover { background-color: rgba(255,255,255,0.03); }
+    .ep-row.playing { background-color: rgba(244,63,94,0.08); border-color: rgba(244,63,94,0.3) !important; }
+    .ep-row.playing .ep-num { color: #f43f5e; }
 
-    /* Tab active state */
-    .tab-btn.active { color: white; border-color: #e11d48; }
-    .tab-btn { border-bottom: 2px solid transparent; }
-    .tab-content { display: none; }
-    .tab-content.active { display: block; }
+    /* Progress bar */
+    .progress-bar { -webkit-appearance: none; appearance: none; height: 4px; background: rgba(255,255,255,0.1); cursor: pointer; border-radius: 2px; }
+    .progress-bar::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%; background: #f43f5e; cursor: pointer; margin-top: -5px; }
+    .progress-bar::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; background: #f43f5e; cursor: pointer; border: none; }
+    .progress-bar::-webkit-slider-runnable-track { height: 4px; border-radius: 2px; }
+    .progress-bar::-moz-range-track { height: 4px; border-radius: 2px; background: rgba(255,255,255,0.1); }
 
-    /* Star fill animation */
-    .star-fill { transition: width 0.6s ease; }
+    /* Volume slider */
+    .vol-bar { -webkit-appearance: none; appearance: none; width: 80px; height: 4px; background: rgba(255,255,255,0.15); cursor: pointer; border-radius: 2px; }
+    .vol-bar::-webkit-slider-thumb { -webkit-appearance: none; width: 12px; height: 12px; border-radius: 50%; background: white; cursor: pointer; margin-top: -4px; }
+    .vol-bar::-moz-range-thumb { width: 12px; height: 12px; border-radius: 50%; background: white; cursor: pointer; border: none; }
+
+    /* Toast */
+    .toast {
+      transform: translateY(20px); opacity: 0; pointer-events: none;
+      transition: all 0.4s ease;
+    }
+    .toast.show {
+      transform: translateY(0); opacity: 1; pointer-events: auto;
+    }
+
+    body::after {
+      content: ''; position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+      opacity: 0.025; pointer-events: none; z-index: 9999;
+    }
   </style>
 </head>
 
@@ -105,7 +105,7 @@
   <!-- ===== NAVIGATION ===== -->
   <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 bg-transparent">
     <div class="max-w-7xl mx-auto px-6 md:px-12 py-5 flex items-center justify-between">
-      <a href="index.html" class="flex items-center gap-3 group">
+      <a href="index.html" class="flex items-center gap-3">
         <div class="w-9 h-9 rounded-lg bg-rose-600 flex items-center justify-center">
           <i data-lucide="play" class="w-4 h-4 text-white fill-white"></i>
         </div>
@@ -115,23 +115,13 @@
         <a href="index.html" class="text-sm font-medium text-zinc-400 hover:text-white transition-colors">Home</a>
         <a href="index.html#trending" class="text-sm font-medium text-zinc-400 hover:text-white transition-colors">Browse</a>
         <a href="index.html#genres" class="text-sm font-medium text-zinc-400 hover:text-white transition-colors">Categories</a>
-        <a href="#" class="text-sm font-medium text-zinc-400 hover:text-white transition-colors">My List</a>
-        <a href="#" class="text-sm font-medium text-zinc-400 hover:text-white transition-colors">News</a>
       </div>
       <div class="flex items-center gap-4">
         <button id="searchBtn" class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors">
           <i data-lucide="search" class="w-5 h-5 text-zinc-300"></i>
         </button>
         <div class="w-9 h-9 rounded-full bg-gradient-to-br from-rose-500 to-orange-500 flex items-center justify-center text-xs font-bold cursor-pointer">A</div>
-        <button id="mobileMenuBtn" class="md:hidden w-10 h-10 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors">
-          <i data-lucide="menu" class="w-5 h-5"></i>
-        </button>
       </div>
-    </div>
-    <div id="mobileMenu" class="md:hidden hidden bg-[#0a0a12]/95 backdrop-blur-xl border-t border-white/5 px-6 py-6 space-y-4">
-      <a href="index.html" class="block text-sm font-medium text-zinc-400 py-2">Home</a>
-      <a href="index.html#trending" class="block text-sm font-medium text-zinc-400 py-2">Browse</a>
-      <a href="index.html#genres" class="block text-sm font-medium text-zinc-400 py-2">Categories</a>
     </div>
   </nav>
 
@@ -140,58 +130,123 @@
     <div class="w-full max-w-2xl px-6">
       <div class="relative">
         <i data-lucide="search" class="absolute left-5 top-1/2 -translate-y-1/2 w-6 h-6 text-zinc-400"></i>
-        <input id="searchInput" type="text" placeholder="Search anime, genres, studios..."
-          class="w-full bg-white/5 border border-white/10 rounded-2xl py-5 pl-14 pr-14 text-lg text-white placeholder-zinc-500 focus:outline-none focus:border-rose-500/50 focus:ring-2 focus:ring-rose-500/20 transition-all" />
-        <button id="closeSearch" class="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors">
+        <input type="text" placeholder="Search anime..." class="w-full bg-white/5 border border-white/10 rounded-2xl py-5 pl-14 pr-14 text-lg text-white placeholder-zinc-500 focus:outline-none focus:border-rose-500/50 transition-all"/>
+        <button onclick="document.getElementById('searchOverlay').classList.remove('active')" class="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors">
           <i data-lucide="x" class="w-5 h-5 text-zinc-400"></i>
         </button>
       </div>
     </div>
   </div>
 
+  <!-- ===== VIDEO PLAYER OVERLAY ===== -->
+  <div id="playerOverlay" class="player-overlay fixed inset-0 z-[55] bg-black/95 flex flex-col">
+    <!-- Player top bar -->
+    <div class="flex items-center justify-between px-4 md:px-8 py-4 flex-shrink-0">
+      <div class="flex items-center gap-3">
+        <button onclick="closePlayer()" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors">
+          <i data-lucide="arrow-left" class="w-5 h-5"></i>
+        </button>
+        <div>
+          <p id="playerEpTitle" class="text-sm font-semibold">Episode 1 — Cruelty</p>
+          <p class="text-xs text-zinc-500">Demon Slayer: Kimetsu no Yaiba</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <button id="nextEpBtn" onclick="playNextEp()" class="hidden md:flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors text-sm font-medium">
+          <span>Next Ep</span>
+          <i data-lucide="skip-forward" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Video area -->
+    <div class="flex-1 flex items-center justify-center px-4 md:px-8 pb-4 relative">
+      <div class="w-full max-w-5xl aspect-video bg-black rounded-xl overflow-hidden relative group">
+        <video id="videoPlayer" class="w-full h-full object-contain" preload="metadata">
+          <source src="" type="video/mp4">
+        </video>
+        <!-- Big play button overlay -->
+        <div id="bigPlayBtn" onclick="togglePlay()" class="absolute inset-0 flex items-center justify-center bg-black/30 cursor-pointer transition-opacity">
+          <div class="w-20 h-20 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center hover:scale-110 transition-transform">
+            <i data-lucide="play" class="w-9 h-9 text-white fill-white ml-1"></i>
+          </div>
+        </div>
+        <!-- Loading spinner -->
+        <div id="loadingSpinner" class="absolute inset-0 flex items-center justify-center bg-black/50 hidden">
+          <div class="w-10 h-10 border-3 border-white/20 border-t-rose-500 rounded-full animate-spin"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Player controls -->
+    <div class="flex-shrink-0 px-4 md:px-8 pb-6">
+      <div class="max-w-5xl mx-auto">
+        <!-- Progress -->
+        <div class="flex items-center gap-3 mb-4">
+          <span id="currentTime" class="text-xs text-zinc-400 w-12 text-right font-mono">0:00</span>
+          <input id="progressBar" type="range" min="0" max="100" value="0" class="progress-bar flex-1" oninput="seekVideo(this.value)"/>
+          <span id="duration" class="text-xs text-zinc-400 w-12 font-mono">0:00</span>
+        </div>
+        <!-- Buttons -->
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <button onclick="togglePlay()" class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors">
+              <i id="playPauseIcon" data-lucide="play" class="w-5 h-5 fill-white"></i>
+            </button>
+            <button onclick="skipTime(-10)" class="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors text-zinc-400">
+              <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+            </button>
+            <button onclick="skipTime(10)" class="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors text-zinc-400">
+              <i data-lucide="rotate-cw" class="w-4 h-4"></i>
+            </button>
+            <div class="flex items-center gap-2 ml-2">
+              <button onclick="toggleMute()" class="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors text-zinc-400">
+                <i id="volIcon" data-lucide="volume-2" class="w-4 h-4"></i>
+              </button>
+              <input id="volBar" type="range" min="0" max="100" value="80" class="vol-bar hidden md:block" oninput="setVolume(this.value)"/>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="toggleSubtitles()" class="px-3 py-1.5 rounded-md text-xs font-medium text-zinc-400 hover:bg-white/10 transition-colors" id="subBtn">SUB</button>
+            <button onclick="setQuality('720')" class="px-3 py-1.5 rounded-md text-xs font-medium text-zinc-400 hover:bg-white/10 transition-colors">720p</button>
+            <button onclick="toggleFullscreen()" class="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors text-zinc-400">
+              <i data-lucide="maximize" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ===== HERO / ANIME HEADER ===== -->
   <section class="relative min-h-[85vh] flex items-end overflow-hidden">
-    <!-- Background image (blurred) -->
-    <div id="heroBg" class="absolute inset-0 bg-cover bg-center bg-no-repeat scale-110 blur-sm"></div>
-    <!-- Dark overlays -->
+    <div class="absolute inset-0 bg-cover bg-center bg-no-repeat scale-110 blur-sm" style="background-image: url('https://picsum.photos/seed/demon-slayer-kn/1920/1080.jpg')"></div>
     <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a12] via-[#0a0a12]/60 to-[#0a0a12]/40"></div>
     <div class="absolute inset-0 bg-gradient-to-r from-[#0a0a12] via-transparent to-transparent"></div>
-
-    <!-- Red moon -->
-    <div class="red-moon absolute -top-10 right-[10%] w-[200px] h-[200px] md:w-[300px] md:h-[300px] rounded-full bg-gradient-to-br from-red-500 via-red-700 to-red-950 opacity-60"></div>
-
-    <!-- Petals -->
+    <div class="red-moon absolute -top-10 right-[10%] w-[200px] h-[200px] md:w-[300px] md:h-[300px] rounded-full bg-gradient-to-br from-red-500 via-red-700 to-red-950 opacity-50"></div>
     <div id="petals-container" class="absolute inset-0 overflow-hidden pointer-events-none"></div>
 
-    <!-- Content -->
     <div class="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 pb-16 md:pb-24">
-      <!-- Breadcrumb -->
       <div class="flex items-center gap-2 text-xs text-zinc-500 mb-6">
         <a href="index.html" class="hover:text-white transition-colors">Home</a>
         <i data-lucide="chevron-right" class="w-3 h-3"></i>
-        <a href="index.html#trending" class="hover:text-white transition-colors">Browse</a>
+        <a href="index.html#trending" class="hover:text-white transition-colors">Trending</a>
         <i data-lucide="chevron-right" class="w-3 h-3"></i>
-        <span id="breadcrumbTitle" class="text-zinc-300">Anime</span>
+        <span class="text-zinc-300">Demon Slayer</span>
       </div>
 
-      <div class="flex flex-col md:flex-row gap-8 md:gap-12 items-end md:items-end">
-        <!-- Poster -->
+      <div class="flex flex-col md:flex-row gap-8 md:gap-12 items-end">
         <div class="flex-shrink-0 w-[200px] md:w-[240px] rounded-xl overflow-hidden shadow-2xl shadow-black/50 ring-1 ring-white/10">
-          <img id="posterImg" src="" alt="" class="w-full aspect-[2/3] object-cover"/>
+          <img src="https://picsum.photos/seed/demon-slayer-kn/480/720.jpg" alt="Demon Slayer" class="w-full aspect-[2/3] object-cover"/>
         </div>
-
-        <!-- Info -->
         <div class="flex-1 min-w-0">
           <div class="flex flex-wrap items-center gap-3 mb-3">
-            <span id="genreBadge" class="px-3 py-1 rounded-full bg-rose-600/20 border border-rose-500/30 text-xs font-semibold text-rose-400"></span>
-            <span id="yearBadge" class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-zinc-400">2025</span>
-            <span id="statusBadge" class="px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-xs font-semibold text-emerald-400">Airing</span>
+            <span class="px-3 py-1 rounded-full bg-rose-600/20 border border-rose-500/30 text-xs font-semibold text-rose-400">Action</span>
+            <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-zinc-400">2024</span>
+            <span class="px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-xs font-semibold text-emerald-400">Airing</span>
           </div>
-
-          <h1 id="animeTitle" class="font-display text-5xl md:text-7xl tracking-wider leading-none mb-4"></h1>
-
+          <h1 class="font-display text-5xl md:text-7xl tracking-wider leading-none mb-4">DEMON SLAYER</h1>
           <div class="flex items-center gap-6 mb-5">
-            <!-- Star rating -->
             <div class="flex items-center gap-2">
               <div class="flex items-center gap-0.5">
                 <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-yellow-400"></i>
@@ -200,26 +255,24 @@
                 <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-yellow-400"></i>
                 <i data-lucide="star" class="w-4 h-4 text-zinc-600"></i>
               </div>
-              <span id="ratingNum" class="text-sm font-bold text-white"></span>
+              <span class="text-sm font-bold">9.1</span>
             </div>
             <span class="text-zinc-600">|</span>
-            <span id="epsInfo" class="text-sm text-zinc-400"></span>
+            <span class="text-sm text-zinc-400">26 Episodes</span>
             <span class="text-zinc-600">|</span>
             <span class="text-sm text-zinc-400">Sub & Dub</span>
           </div>
-
-          <p id="animeDesc" class="text-sm md:text-base text-zinc-400 leading-relaxed max-w-2xl mb-8"></p>
-
+          <p class="text-sm md:text-base text-zinc-400 leading-relaxed max-w-2xl mb-8">Since ancient times, rumors have abounded of man-eating demons lurking in the woods. When Tanjiro's family is slaughtered by a demon, he embarks on a dangerous journey to find a way to return his sister Nezuko to human form.</p>
           <div class="flex flex-wrap items-center gap-3">
-            <button id="playBtn" class="group flex items-center gap-3 px-8 py-4 bg-rose-600 hover:bg-rose-500 rounded-full transition-all duration-300 hover:shadow-lg hover:shadow-rose-600/25">
+            <button onclick="playEpisode(1)" class="group flex items-center gap-3 px-8 py-4 bg-rose-600 hover:bg-rose-500 rounded-full transition-all duration-300 hover:shadow-lg hover:shadow-rose-600/25">
               <i data-lucide="play" class="w-5 h-5 fill-white"></i>
               <span class="text-sm font-bold tracking-wide">Watch Now</span>
             </button>
-            <button id="addListBtn" class="flex items-center gap-3 px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 rounded-full transition-all duration-300">
-              <i data-lucide="plus" class="w-5 h-5 text-zinc-300"></i>
-              <span class="text-sm font-medium tracking-wide text-zinc-300">My List</span>
+            <button id="addListBtn" onclick="toggleMyList()" class="flex items-center gap-3 px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 rounded-full transition-all duration-300">
+              <i data-lucide="plus" class="w-5 h-5 text-zinc-300" id="listIcon"></i>
+              <span class="text-sm font-medium tracking-wide text-zinc-300" id="listText">My List</span>
             </button>
-            <button id="shareBtn" class="w-12 h-12 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center transition-colors">
+            <button onclick="copyLink()" class="w-12 h-12 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center transition-colors">
               <i data-lucide="share-2" class="w-5 h-5 text-zinc-400"></i>
             </button>
           </div>
@@ -228,446 +281,440 @@
     </div>
   </section>
 
-  <!-- ===== TABS SECTION ===== -->
+  <!-- ===== EPISODES SECTION ===== -->
   <section class="relative py-12 md:py-20">
     <div class="max-w-7xl mx-auto px-6 md:px-12">
-      <!-- Tab buttons -->
-      <div class="flex items-center gap-8 border-b border-white/5 mb-10 overflow-x-auto scroll-hide">
-        <button class="tab-btn active text-sm font-semibold pb-3 whitespace-nowrap transition-colors text-rose-500" data-tab="episodes">Episodes</button>
-        <button class="tab-btn text-sm font-semibold pb-3 whitespace-nowrap transition-colors text-zinc-500 hover:text-zinc-300" data-tab="overview">Overview</button>
-        <button class="tab-btn text-sm font-semibold pb-3 whitespace-nowrap transition-colors text-zinc-500 hover:text-zinc-300" data-tab="characters">Characters</button>
-        <button class="tab-btn text-sm font-semibold pb-3 whitespace-nowrap transition-colors text-zinc-500 hover:text-zinc-300" data-tab="related">Related</button>
+      <div class="flex items-center justify-between mb-8">
+        <h2 class="font-display text-3xl md:text-4xl tracking-wider">Episodes</h2>
+        <select class="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-xs text-zinc-400 focus:outline-none focus:border-rose-500/50">
+          <option>Newest First</option>
+          <option>Oldest First</option>
+        </select>
       </div>
 
-      <!-- ===== TAB: EPISODES ===== -->
-      <div id="tab-episodes" class="tab-content active">
-        <!-- Sort/filter bar -->
-        <div class="flex items-center justify-between mb-6">
-          <h3 class="text-lg font-semibold">All Episodes</h3>
-          <div class="flex items-center gap-3">
-            <select class="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-xs text-zinc-400 focus:outline-none focus:border-rose-500/50">
-              <option>Newest First</option>
-              <option>Oldest First</option>
-              <option>Highest Rated</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Episode list -->
-        <div id="episodeList" class="space-y-2">
-          <!-- Generated by JS -->
-        </div>
+      <div id="episodeList" class="space-y-2">
+        <!-- Generated by JavaScript -->
       </div>
-
-      <!-- ===== TAB: OVERVIEW ===== -->
-      <div id="tab-overview" class="tab-content">
-        <div class="grid md:grid-cols-3 gap-10">
-          <div class="md:col-span-2 space-y-8">
-            <div>
-              <h3 class="text-lg font-semibold mb-3">Synopsis</h3>
-              <p id="longDesc" class="text-sm text-zinc-400 leading-relaxed"></p>
-            </div>
-            <div>
-              <h3 class="text-lg font-semibold mb-3">Trailer</h3>
-              <div class="aspect-video rounded-xl bg-zinc-900 border border-white/5 flex items-center justify-center cursor-pointer group hover:border-white/10 transition-colors">
-                <div class="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-colors">
-                  <i data-lucide="play" class="w-7 h-7 text-white fill-white ml-1"></i>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="space-y-6">
-            <div>
-              <h3 class="text-lg font-semibold mb-4">Information</h3>
-              <dl class="space-y-3">
-                <div class="flex justify-between"><dt class="text-sm text-zinc-500">Studio</dt><dd class="text-sm font-medium">Ufotable</dd></div>
-                <div class="flex justify-between"><dt class="text-sm text-zinc-500">Source</dt><dd class="text-sm font-medium">Manga</dd></div>
-                <div class="flex justify-between"><dt class="text-sm text-zinc-500">Genre</dt><dd id="infoGenre" class="text-sm font-medium"></dd></div>
-                <div class="flex justify-between"><dt class="text-sm text-zinc-500">Episodes</dt><dd id="infoEps" class="text-sm font-medium"></dd></div>
-                <div class="flex justify-between"><dt class="text-sm text-zinc-500">Status</dt><dd class="text-sm font-medium text-emerald-400">Airing</dd></div>
-                <div class="flex justify-between"><dt class="text-sm text-zinc-500">Season</dt><dd class="text-sm font-medium">Spring 2025</dd></div>
-                <div class="flex justify-between"><dt class="text-sm text-zinc-500">Rating</dt><dd id="infoRating" class="text-sm font-medium"></dd></div>
-              </dl>
-            </div>
-            <div>
-              <h3 class="text-lg font-semibold mb-4">Tags</h3>
-              <div class="flex flex-wrap gap-2" id="tagsContainer">
-                <!-- Generated by JS -->
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ===== TAB: CHARACTERS ===== -->
-      <div id="tab-characters" class="tab-content">
-        <h3 class="text-lg font-semibold mb-6">Main Characters</h3>
-        <div id="charGrid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-5">
-          <!-- Generated by JS -->
-        </div>
-      </div>
-
-      <!-- ===== TAB: RELATED ===== -->
-      <div id="tab-related" class="tab-content">
-        <h3 class="text-lg font-semibold mb-6">You Might Also Like</h3>
-        <div id="relatedGrid" class="scroll-hide flex gap-5 overflow-x-auto pb-4">
-          <!-- Generated by JS -->
-        </div>
-      </div>
-
     </div>
   </section>
 
-  <!-- ===== TOAST NOTIFICATION ===== -->
-  <div id="toast" class="fixed bottom-6 right-6 z-[70] bg-zinc-800 border border-white/10 rounded-xl px-5 py-3.5 flex items-center gap-3 shadow-2xl transform translate-y-20 opacity-0 transition-all duration-400 pointer-events-none">
-    <i data-lucide="check-circle" class="w-5 h-5 text-emerald-400 flex-shrink-0"></i>
-    <span id="toastMsg" class="text-sm font-medium"></span>
-  </div>
-
-  <!-- ===== FOOTER ===== -->
-  <footer class="relative border-t border-white/5 pt-16 pb-8">
+  <!-- ===== OVERVIEW SECTION ===== -->
+  <section class="relative py-12 md:py-20">
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[80%] h-px bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
     <div class="max-w-7xl mx-auto px-6 md:px-12">
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-10 mb-16">
-        <div class="col-span-2 md:col-span-1">
-          <a href="index.html" class="flex items-center gap-3 mb-5">
-            <div class="w-8 h-8 rounded-lg bg-rose-600 flex items-center justify-center">
-              <i data-lucide="play" class="w-3.5 h-3.5 text-white fill-white"></i>
+      <h2 class="font-display text-3xl md:text-4xl tracking-wider mb-8">Overview</h2>
+      <div class="grid md:grid-cols-3 gap-10">
+        <div class="md:col-span-2 space-y-8">
+          <div>
+            <h3 class="text-lg font-semibold mb-3">Synopsis</h3>
+            <p class="text-sm text-zinc-400 leading-relaxed">Ever since the death of his father, the burden of supporting the family has fallen upon Tanjiro Kamado's shoulders. Though living impoverished on a remote mountain, the Kamado family are able to enjoy a relatively peaceful and happy life. One day, Tanjiro decides to go down to the local village to make a little money selling charcoal. On his way back, night falls, forcing Tanjiro to take shelter in the house of a strange man, who warns him of the existence of flesh-eating demons that lurk in the woods at night.</p>
+            <p class="text-sm text-zinc-400 leading-relaxed mt-4">When he finally arrives back home the next day, all of his family members are dead, having been slaughtered by a demon. The sole survivor is his sister Nezuko, but she has been transformed into a demon herself! Though devastated by this grim reality, Tanjiro resolves to become a demon slayer so that he can turn his sister back into a human and kill the demon that massacred his family.</p>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold mb-3">Trailer</h3>
+            <div class="aspect-video rounded-xl bg-zinc-900 border border-white/5 flex items-center justify-center cursor-pointer group hover:border-white/10 transition-colors" onclick="playEpisode(1)">
+              <div class="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-rose-600/30 transition-colors">
+                <i data-lucide="play" class="w-7 h-7 text-white fill-white ml-1"></i>
+              </div>
             </div>
-            <span class="font-display text-xl tracking-wider">ANIME SEKAI</span>
-          </a>
-          <p class="text-sm text-zinc-500 leading-relaxed">Your ultimate destination for anime streaming.</p>
+          </div>
         </div>
-        <div>
-          <h4 class="text-xs font-semibold tracking-[0.2em] uppercase text-zinc-400 mb-5">Browse</h4>
-          <ul class="space-y-3">
-            <li><a href="index.html#trending" class="text-sm text-zinc-500 hover:text-white transition-colors">Trending</a></li>
-            <li><a href="index.html#genres" class="text-sm text-zinc-500 hover:text-white transition-colors">Genres</a></li>
-            <li><a href="#" class="text-sm text-zinc-500 hover:text-white transition-colors">Top Rated</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4 class="text-xs font-semibold tracking-[0.2em] uppercase text-zinc-400 mb-5">Company</h4>
-          <ul class="space-y-3">
-            <li><a href="#" class="text-sm text-zinc-500 hover:text-white transition-colors">About Us</a></li>
-            <li><a href="#" class="text-sm text-zinc-500 hover:text-white transition-colors">Contact</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4 class="text-xs font-semibold tracking-[0.2em] uppercase text-zinc-400 mb-5">Legal</h4>
-          <ul class="space-y-3">
-            <li><a href="#" class="text-sm text-zinc-500 hover:text-white transition-colors">Privacy Policy</a></li>
-            <li><a href="#" class="text-sm text-zinc-500 hover:text-white transition-colors">Terms of Service</a></li>
-          </ul>
+        <div class="space-y-6">
+          <div>
+            <h3 class="text-lg font-semibold mb-4">Information</h3>
+            <dl class="space-y-3">
+              <div class="flex justify-between"><dt class="text-sm text-zinc-500">Studio</dt><dd class="text-sm font-medium">Ufotable</dd></div>
+              <div class="flex justify-between"><dt class="text-sm text-zinc-500">Source</dt><dd class="text-sm font-medium">Manga</dd></div>
+              <div class="flex justify-between"><dt class="text-sm text-zinc-500">Genre</dt><dd class="text-sm font-medium">Action, Fantasy</dd></div>
+              <div class="flex justify-between"><dt class="text-sm text-zinc-500">Episodes</dt><dd class="text-sm font-medium">26</dd></div>
+              <div class="flex justify-between"><dt class="text-sm text-zinc-500">Status</dt><dd class="text-sm font-medium text-emerald-400">Airing</dd></div>
+              <div class="flex justify-between"><dt class="text-sm text-zinc-500">Season</dt><dd class="text-sm font-medium">Spring 2025</dd></div>
+              <div class="flex justify-between"><dt class="text-sm text-zinc-500">Rating</dt><dd class="text-sm font-medium">9.1 / 10</dd></div>
+            </dl>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold mb-4">Tags</h3>
+            <div class="flex flex-wrap gap-2">
+              <span class="px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs text-zinc-400">Action</span>
+              <span class="px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs text-zinc-400">Fantasy</span>
+              <span class="px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs text-zinc-400">Demons</span>
+              <span class="px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs text-zinc-400">Swordsmanship</span>
+              <span class="px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs text-zinc-400">Historical</span>
+              <span class="px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs text-zinc-400">Supernatural</span>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="border-t border-white/5 pt-8 text-center">
+    </div>
+  </section>
+
+  <!-- ===== CHARACTERS ===== -->
+  <section class="relative py-12 md:py-20">
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[80%] h-px bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
+    <div class="max-w-7xl mx-auto px-6 md:px-12">
+      <h2 class="font-display text-3xl md:text-4xl tracking-wider mb-8">Characters</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-5">
+        <div class="group cursor-pointer text-center">
+          <div class="aspect-square rounded-xl overflow-hidden mb-3 bg-zinc-900 ring-1 ring-white/5 group-hover:ring-white/10 transition-all">
+            <img src="https://picsum.photos/seed/tanjiro-char/200/200.jpg" alt="Tanjiro" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"/>
+          </div>
+          <h4 class="text-sm font-semibold">Tanjiro</h4>
+          <p class="text-xs text-zinc-500 mt-0.5">Protagonist</p>
+        </div>
+        <div class="group cursor-pointer text-center">
+          <div class="aspect-square rounded-xl overflow-hidden mb-3 bg-zinc-900 ring-1 ring-white/5 group-hover:ring-white/10 transition-all">
+            <img src="https://picsum.photos/seed/nezuko-char/200/200.jpg" alt="Nezuko" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"/>
+          </div>
+          <h4 class="text-sm font-semibold">Nezuko</h4>
+          <p class="text-xs text-zinc-500 mt-0.5">Supporting</p>
+        </div>
+        <div class="group cursor-pointer text-center">
+          <div class="aspect-square rounded-xl overflow-hidden mb-3 bg-zinc-900 ring-1 ring-white/5 group-hover:ring-white/10 transition-all">
+            <img src="https://picsum.photos/seed/zenitsu-char/200/200.jpg" alt="Zenitsu" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"/>
+          </div>
+          <h4 class="text-sm font-semibold">Zenitsu</h4>
+          <p class="text-xs text-zinc-500 mt-0.5">Supporting</p>
+        </div>
+        <div class="group cursor-pointer text-center">
+          <div class="aspect-square rounded-xl overflow-hidden mb-3 bg-zinc-900 ring-1 ring-white/5 group-hover:ring-white/10 transition-all">
+            <img src="https://picsum.photos/seed/inosuke-char/200/200.jpg" alt="Inosuke" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"/>
+          </div>
+          <h4 class="text-sm font-semibold">Inosuke</h4>
+          <p class="text-xs text-zinc-500 mt-0.5">Supporting</p>
+        </div>
+        <div class="group cursor-pointer text-center">
+          <div class="aspect-square rounded-xl overflow-hidden mb-3 bg-zinc-900 ring-1 ring-white/5 group-hover:ring-white/10 transition-all">
+            <img src="https://picsum.photos/seed/giyu-char/200/200.jpg" alt="Giyu" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"/>
+          </div>
+          <h4 class="text-sm font-semibold">Giyu</h4>
+          <p class="text-xs text-zinc-500 mt-0.5">Supporting</p>
+        </div>
+        <div class="group cursor-pointer text-center">
+          <div class="aspect-square rounded-xl overflow-hidden mb-3 bg-zinc-900 ring-1 ring-white/5 group-hover:ring-white/10 transition-all">
+            <img src="https://picsum.photos/seed/muzan-char/200/200.jpg" alt="Muzan" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"/>
+          </div>
+          <h4 class="text-sm font-semibold">Muzan</h4>
+          <p class="text-xs text-zinc-500 mt-0.5">Antagonist</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="relative border-t border-white/5 pt-12 pb-8">
+    <div class="max-w-7xl mx-auto px-6 md:px-12">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+        <a href="index.html" class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-lg bg-rose-600 flex items-center justify-center">
+            <i data-lucide="play" class="w-3.5 h-3.5 text-white fill-white"></i>
+          </div>
+          <span class="font-display text-xl tracking-wider">ANIME SEKAI</span>
+        </a>
         <p class="text-xs text-zinc-600">&copy; 2025 Anime Sekai. All rights reserved.</p>
       </div>
     </div>
   </footer>
 
+  <!-- ===== TOAST ===== -->
+  <div id="toast" class="toast fixed bottom-6 right-6 z-[70] bg-zinc-800 border border-white/10 rounded-xl px-5 py-3.5 flex items-center gap-3 shadow-2xl">
+    <i data-lucide="check-circle" class="w-5 h-5 text-emerald-400 flex-shrink-0"></i>
+    <span id="toastMsg" class="text-sm font-medium"></span>
+  </div>
 
   <!-- ===== JAVASCRIPT ===== -->
   <script>
     lucide.createIcons();
 
-    // ========== ANIME DATABASE ==========
-    const animeDB = {
-      "Demon Slayer": {
-        desc: "Since ancient times, rumors have abounded of man-eating demons lurking in the woods. When Tanjiro's family is slaughtered by a demon, he embarks on a dangerous journey to find a way to return his sister Nezuko to human form.",
-        longDesc: "Since ancient times, rumors have abounded of man-eating demons lurking in the woods. Because of this, the local townsfolk never venture outside at night. Legend has it that a demon slayer also roams the night, hunting down these bloodthirsty demons. For young Tanjiro Kamado, these rumors will soon become his harsh reality.\n\nEver since the death of his father, the burden of supporting the family has fallen upon Tanjiro's shoulders. Though living impoverished on a remote mountain, the Kamado family are able to enjoy a relatively peaceful and happy life. One day, Tanjiro decides to go down to the local village to make a little money selling charcoal. On his way back, night falls, forcing Tanjiro to take shelter in the house of a strange man, who warns him of the existence of flesh-eating demons that lurk in the woods at night.\n\nWhen he finally arrives back home the next day, all of his family members are dead, having been slaughtered by a demon. The sole survivor is his sister Nezuko, but she has been transformed into a demon herself! Though devastated by this grim reality, Tanjiro resolves to become a demon slayer so that he can turn his sister back into a human and kill the demon that massacred his family.",
-        studio: "Ufotable",
-        genre: "Action",
-        eps: 24,
-        rating: 9.1,
-        year: "2024",
-        status: "Airing",
-        season: "Spring 2025",
-        tags: ["Action", "Fantasy", "Demons", "Swordsmanship", "Historical", "Supernatural"],
-        characters: [
-          { name: "Tanjiro", role: "Protagonist", img: "tanjiro-char" },
-          { name: "Nezuko", role: "Supporting", img: "nezuko-char" },
-          { name: "Zenitsu", role: "Supporting", img: "zenitsu-char" },
-          { name: "Inosuke", role: "Supporting", img: "inosuke-char" },
-          { name: "Giyu", role: "Supporting", img: "giyu-char" },
-          { name: "Muzan", role: "Antagonist", img: "muzan-char" },
-        ],
-        related: ["Jujutsu Kaisen", "Solo Leveling", "Chainsaw Man", "Frieren"]
-      },
-      "Jujutsu Kaisen": {
-        desc: "Yuji Itadori, a boy with tremendous physical strength, joins a secret organization of Jujutsu Sorcerers to eliminate a powerful Curse named Ryomen Sukuna, of whom Yuji becomes the host.",
-        longDesc: "Idly indulging in baseless paranormal activities with the Occult Club, high schooler Yuuji Itadori spends his days at either the clubroom or the hospital, where he visits his bedridden grandfather. However, this leisurely lifestyle soon takes a turn for the strange when he unknowingly encounters a cursed item.\n\nTriggering a chain of supernatural occurrences, Yuuji finds himself suddenly thrust into the world of Curses—dreadful beings formed from human malice and negativity—after swallowing a finger said to belong to the demon Ryomen Sukuna. Taking possession of Yuuji's body, Sukuna is forced to watch as the boy enrolls in the Tokyo Jujutsu High School to find and consume the rest of his fingers, thereby allowing himself to be exorcised for good.",
-        studio: "MAPPA",
-        genre: "Action",
-        eps: 23,
-        rating: 8.9,
-        year: "2024",
-        status: "Airing",
-        season: "Fall 2024",
-        tags: ["Action", "Supernatural", "Curses", "School", "Shounen"],
-        characters: [
-          { name: "Yuji", role: "Protagonist", img: "yuji-char" },
-          { name: "Megumi", role: "Supporting", img: "megumi-char" },
-          { name: "Nobara", role: "Supporting", img: "nobara-char" },
-          { name: "Gojo", role: "Supporting", img: "gojo-char" },
-          { name: "Sukuna", role: "Antagonist", img: "sukuna-char" },
-          { name: "Geto", role: "Antagonist", img: "geto-char" },
-        ],
-        related: ["Demon Slayer", "Solo Leveling", "Chainsaw Man", "My Hero Academia"]
-      },
-      "Frieren": {
-        desc: "After the party of heroes defeated the Demon King, the elf mage Frieren embarks on a journey to understand humanity and the meaning of the connections she made over her thousand-year life.",
-        longDesc: "After the party of heroes defeated the Demon King, they restored peace to the land and returned to their lives. Frieren, the elven mage of the group, lived for over a thousand years and regarded her decade-long adventure with the other heroes as merely a brief chapter.\n\nWhen the group reunites after fifty years, Frieren barely notices the passage of time. But after the human hero Himmel dies of old age, she is left with regret and a new purpose: to learn what it means to truly understand people. Accompanied by the warrior Eisen's apprentice Fern, Frieren sets out on a new journey to retrace the path she once took with her fallen comrades.",
-        studio: "Madhouse",
-        genre: "Fantasy",
-        eps: 28,
-        rating: 9.3,
-        year: "2024",
-        status: "Completed",
-        season: "Fall 2023",
-        tags: ["Fantasy", "Adventure", "Drama", "Elves", "Philosophical", "Slow Life"],
-        characters: [
-          { name: "Frieren", role: "Protagonist", img: "frieren-char" },
-          { name: "Fern", role: "Supporting", img: "fern-char" },
-          { name: "Stark", role: "Supporting", img: "stark-char" },
-          { name: "Himmel", role: "Supporting", img: "himmel-char" },
-          { name: "Heiter", role: "Supporting", img: "heiter-char" },
-          { name: "Eisen", role: "Supporting", img: "eisen-char" },
-        ],
-        related: ["Mushoku Tensei S2", "Re:Zero S3", "Vinland Saga", "Steins;Gate"]
-      },
-      "Solo Leveling": {
-        desc: "In a world where hunters with magical abilities must battle deadly monsters, the weakest hunter, Sung Jinwoo, finds a hidden dungeon and gains the power to level up without limit.",
-        longDesc: "Over a decade ago, \"gates\" connecting our world to a monster-filled realm began to open, bestowing some humans with the power to hunt these beasts—they are known as \"hunters.\" Sung Jinwoo, the weakest of all hunters known as the \"World's Weakest Hunter,\" finds himself in a constantly-struggling effort to make ends meet.\n\nOne day, after a particularly devastating dungeon raid that nearly costs him his life, a mysterious System appears and grants him the unprecedented ability to level up in strength—possibly beyond any other hunter. With this newfound power, Jinwoo begins a journey from the weakest to the strongest, uncovering the dark truth behind dungeons and the world itself.",
-        studio: "A-1 Pictures",
-        genre: "Action",
-        eps: 12,
-        rating: 8.8,
-        year: "2024",
-        status: "Airing",
-        season: "Winter 2024",
-        tags: ["Action", "Fantasy", "Leveling", "Overpowered MC", "Dungeon", "Game Elements"],
-        characters: [
-          { name: "Jinwoo", role: "Protagonist", img: "jinwoo-char" },
-          { name: "Igris", role: "Supporting", img: "igris-char" },
-          { name: "Yoo Jinho", role: "Supporting", img: "jinho-char" },
-          { name: "Cha Hae-In", role: "Supporting", img: "haein-char" },
-          { name: "Beru", role: "Supporting", img: "beru-char" },
-          { name: "Monarchs", role: "Antagonist", img: "monarch-char" },
-        ],
-        related: ["Demon Slayer", "Jujutsu Kaisen", "Chainsaw Man", "One Piece"]
-      }
-    };
-
-    // Default template for anime not in the database
-    function getDefaultAnime(title, genre, eps, rating, img) {
-      return {
-        desc: `Experience the thrilling world of ${title}. A captivating ${genre.toLowerCase()} anime that has captured the hearts of millions of fans worldwide with its stunning animation, compelling storyline, and unforgettable characters.`,
-        longDesc: `${title} is a critically acclaimed ${genre.toLowerCase()} anime series that has taken the anime community by storm. With ${eps} episodes of breathtaking animation and masterful storytelling, it delivers an unforgettable viewing experience.\n\nThe series explores themes of courage, friendship, and the eternal struggle between light and darkness. Each episode builds upon the last, creating a rich tapestry of narrative that keeps viewers on the edge of their seats.\n\nWith a dedicated fanbase and widespread critical acclaim, ${title} stands as one of the defining anime of its generation. Whether you're a seasoned anime enthusiast or new to the medium, this series offers something truly special.`,
-        studio: "Studio",
-        genre: genre || "Action",
-        eps: parseInt(eps) || 24,
-        rating: parseFloat(rating) || 8.5,
-        year: "2025",
-        status: "Airing",
-        season: "2025",
-        tags: [genre || "Action", "Adventure", "Drama", "Supernatural"],
-        characters: [
-          { name: "Protagonist", role: "Main", img: `${img}-c1` },
-          { name: "Heroine", role: "Main", img: `${img}-c2` },
-          { name: "Rival", role: "Supporting", img: `${img}-c3` },
-          { name: "Mentor", role: "Supporting", img: `${img}-c4` },
-          { name: "Ally", role: "Supporting", img: `${img}-c5` },
-          { name: "Antagonist", role: "Antagonist", img: `${img}-c6` },
-        ],
-        related: ["Demon Slayer", "Jujutsu Kaisen", "Frieren", "Solo Leveling"]
-      };
-    }
-
-    // ========== PARSE URL & LOAD ANIME ==========
-    const params = new URLSearchParams(window.location.search);
-    const title = params.get('title') || 'Unknown Anime';
-    const genre = params.get('genre') || 'Action';
-    const eps = params.get('eps') || '24';
-    const rating = params.get('rating') || '8.5';
-    const img = params.get('img') || 'default-anime';
-
-    const anime = animeDB[title] || getDefaultAnime(title, genre, eps, rating, img);
-
-    // ========== POPULATE PAGE ==========
-    document.title = `${title} — ANIME SEKAI`;
-    document.getElementById('breadcrumbTitle').textContent = title;
-    document.getElementById('animeTitle').textContent = title.toUpperCase();
-    document.getElementById('genreBadge').textContent = anime.genre;
-    document.getElementById('ratingNum').textContent = anime.rating;
-    document.getElementById('epsInfo').textContent = `${anime.eps} Episodes`;
-    document.getElementById('animeDesc').textContent = anime.desc;
-    document.getElementById('longDesc').textContent = anime.longDesc;
-    document.getElementById('infoGenre').textContent = anime.genre;
-    document.getElementById('infoEps').textContent = anime.eps;
-    document.getElementById('infoRating').textContent = anime.rating + ' / 10';
-
-    // Images
-    const imgUrl = `https://picsum.photos/seed/${img}/380/570.jpg`;
-    const bgUrl = `https://picsum.photos/seed/${img}/1920/1080.jpg`;
-    document.getElementById('posterImg').src = imgUrl;
-    document.getElementById('posterImg').alt = title;
-    document.getElementById('heroBg').style.backgroundImage = `url(${bgUrl})`;
-
-    // Status badge
-    const statusBadge = document.getElementById('statusBadge');
-    if (anime.status === 'Completed') {
-      statusBadge.textContent = 'Completed';
-      statusBadge.className = 'px-3 py-1 rounded-full bg-blue-500/15 border border-blue-500/30 text-xs font-semibold text-blue-400';
-    }
-
-    // Year
-    document.getElementById('yearBadge').textContent = anime.year;
-
-    // ========== GENERATE EPISODES ==========
-    const episodeList = document.getElementById('episodeList');
-    const epTitles = [
-      "The Beginning", "First Encounter", "Rising Storm", "Unseen Power",
-      "Breaking Point", "The Gathering", "Shadows and Light", "Trial by Fire",
-      "Hidden Truths", "The Calm Before", "Edge of Despair", "Awakening",
-      "New Allies", "The Hunt", "Into the Abyss", "Reckoning",
-      "Sacrifice", "Beyond Limits", "The Final Stand", "Dawn",
-      "Aftermath", "A New Path", "Eternal Bonds", "Epilogue"
+    // ===== EPISODE DATA =====
+    const episodes = [
+      { num: 1,  title: "Cruelty",              duration: "23:40", date: "Apr 6, 2025" },
+      { num: 2,  title: "Trainer Sakonji Urokodaki", duration: "23:40", date: "Apr 13, 2025" },
+      { num: 3,  title: "Sabito and Makomo",    duration: "23:40", date: "Apr 20, 2025" },
+      { num: 4,  title: "Final Selection",      duration: "23:40", date: "Apr 27, 2025" },
+      { num: 5,  title: "My Own Steel",         duration: "23:40", date: "May 4, 2025" },
+      { num: 6,  title: "Swordsman Accompanying a Demon", duration: "23:40", date: "May 11, 2025" },
+      { num: 7,  title: "Muzan Kibutsuji",      duration: "23:40", date: "May 18, 2025" },
+      { num: 8,  title: "The Smell of Enchanting Blood", duration: "23:40", date: "May 25, 2025" },
+      { num: 9,  title: "Temari Demon and Arrow Demon", duration: "23:40", date: "Jun 1, 2025" },
+      { num: 10, title: "Together Forever",      duration: "23:40", date: "Jun 8, 2025" },
+      { num: 11, title: "Tsuzumi Mansion",        duration: "23:40", date: "Jun 15, 2025" },
+      { num: 12, title: "The Boar Bares Its Fangs, Zenitsu Sleeps", duration: "23:40", date: "Jun 22, 2025" },
+      { num: 13, title: "Something More Important Than Life", duration: "23:40", date: "Jun 29, 2025" },
+      { num: 14, title: "The House with the Wisteria Family Crest", duration: "23:40", date: "Jul 6, 2025" },
+      { num: 15, title: "Mount Natagumo",         duration: "23:40", date: "Jul 13, 2025" },
+      { num: 16, title: "Letting Someone Else Go First", duration: "23:40", date: "Jul 20, 2025" },
+      { num: 17, title: "You Must Master a Single Thing", duration: "23:40", date: "Jul 27, 2025" },
+      { num: 18, title: "A Forged Bond",          duration: "23:40", date: "Aug 3, 2025" },
+      { num: 19, title: "Hinokami",               duration: "23:40", date: "Aug 10, 2025" },
+      { num: 20, title: "Pretend Family",         duration: "23:40", date: "Aug 17, 2025" },
+      { num: 21, title: "Against Corps Rules",    duration: "23:40", date: "Aug 24, 2025" },
+      { num: 22, title: "Master of the Mansion",  duration: "23:40", date: "Aug 31, 2025" },
+      { num: 23, title: "Hashira Meeting",        duration: "23:40", date: "Sep 7, 2025" },
+      { num: 24, title: "Rehabilitation Training", duration: "23:40", date: "Sep 14, 2025" },
+      { num: 25, title: "Tsuguko, Kanao Tsuyuri", duration: "23:40", date: "Sep 21, 2025" },
+      { num: 26, title: "New Mission",            duration: "23:40", date: "Sep 28, 2025" },
     ];
-    for (let i = 1; i <= Math.min(anime.eps, 24); i++) {
-      const epTitle = epTitles[i - 1] || `Episode ${i}`;
-      const duration = `${22 + Math.floor(Math.random() * 4)}:${String(Math.floor(Math.random() * 60)).padStart(2, '0')}`;
-      const date = `Jan ${i + 5}, 2025`;
+
+    // ===== GENERATE EPISODE LIST =====
+    const episodeList = document.getElementById('episodeList');
+    let currentEp = 0;
+
+    episodes.forEach((ep, index) => {
       const row = document.createElement('div');
-      row.className = 'ep-row flex items-center gap-4 md:gap-6 p-4 rounded-xl cursor-pointer group border border-transparent hover:border-white/5';
+      row.className = 'ep-row flex items-center gap-4 md:gap-6 p-4 rounded-xl cursor-pointer border border-transparent';
+      row.id = `ep-row-${ep.num}`;
+      row.onclick = () => playEpisode(ep.num);
       row.innerHTML = `
-        <span class="text-sm font-bold text-zinc-600 w-8 text-right flex-shrink-0 group-hover:text-rose-500 transition-colors">${String(i).padStart(2, '0')}</span>
+        <span class="ep-num text-sm font-bold text-zinc-600 w-8 text-right flex-shrink-0 transition-colors">${String(ep.num).padStart(2, '0')}</span>
         <div class="w-28 md:w-40 aspect-video rounded-lg overflow-hidden bg-zinc-900 flex-shrink-0 relative">
-          <img src="https://picsum.photos/seed/${img}-ep${i}/320/180.jpg" alt="EP ${i}" class="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity" loading="lazy"/>
-          <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-            <div class="w-8 h-8 rounded-full bg-white/20 backdrop-blur flex items-center justify-center">
-              <i data-lucide="play" class="w-3.5 h-3.5 text-white fill-white ml-0.5"></i>
-            </div>
+          <img src="https://picsum.photos/seed/ds-ep${ep.num}/320/180.jpg" alt="EP ${ep.num}" class="w-full h-full object-cover opacity-70 hover:opacity-100 transition-opacity" loading="lazy"/>
+          <div class="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity bg-black/30">
+            <i data-lucide="play" class="w-5 h-5 text-white fill-white"></i>
           </div>
         </div>
         <div class="flex-1 min-w-0 hidden md:block">
-          <h4 class="text-sm font-semibold truncate">${epTitle}</h4>
-          <p class="text-xs text-zinc-500 mt-0.5">${duration} &bull; ${date}</p>
+          <h4 class="text-sm font-semibold truncate">Episode ${ep.num} — ${ep.title}</h4>
+          <p class="text-xs text-zinc-500 mt-0.5">${ep.duration} &bull; ${ep.date}</p>
         </div>
         <div class="flex items-center gap-3 flex-shrink-0">
-          <span class="text-xs text-zinc-600 md:hidden">${duration}</span>
-          <i data-lucide="play-circle" class="w-6 h-6 text-zinc-700 group-hover:text-rose-500 transition-colors"></i>
+          <span class="text-xs text-zinc-600 md:hidden">${ep.duration}</span>
+          <i data-lucide="play-circle" class="w-6 h-6 text-zinc-700 hover:text-rose-500 transition-colors"></i>
         </div>
       `;
       episodeList.appendChild(row);
-    }
-
-    // ========== GENERATE TAGS ==========
-    const tagsContainer = document.getElementById('tagsContainer');
-    anime.tags.forEach(tag => {
-      const el = document.createElement('a');
-      el.href = `index.html#genres`;
-      el.className = 'px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs text-zinc-400 hover:bg-white/10 hover:text-white transition-colors';
-      el.textContent = tag;
-      tagsContainer.appendChild(el);
     });
 
-    // ========== GENERATE CHARACTERS ==========
-    const charGrid = document.getElementById('charGrid');
-    anime.characters.forEach(char => {
-      const el = document.createElement('div');
-      el.className = 'group cursor-pointer text-center';
-      el.innerHTML = `
-        <div class="aspect-square rounded-xl overflow-hidden mb-3 bg-zinc-900 ring-1 ring-white/5 group-hover:ring-white/10 transition-all">
-          <img src="https://picsum.photos/seed/${char.img}/200/200.jpg" alt="${char.name}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy"/>
-        </div>
-        <h4 class="text-sm font-semibold truncate">${char.name}</h4>
-        <p class="text-xs text-zinc-500 mt-0.5">${char.role}</p>
-      `;
-      charGrid.appendChild(el);
-    });
-
-    // ========== GENERATE RELATED ==========
-    const relatedGrid = document.getElementById('relatedGrid');
-    const relatedImgs = {
-      "Demon Slayer": "demon-slayer-kn",
-      "Jujutsu Kaisen": "jujutsu-kaisen-jk",
-      "Frieren": "frieren-anime",
-      "Solo Leveling": "solo-leveling-sg",
-      "Chainsaw Man": "chainsaw-man-cm",
-      "One Piece": "one-piece-op",
-      "My Hero Academia": "my-hero-academia-mha",
-      "Mushoku Tensei S2": "mushoku-tensei-mt",
-      "Re:Zero S3": "rezero-s3-rz",
-      "Vinland Saga": "vinland-saga-vs",
-      "Steins;Gate": "steins-gate-sg",
-      "Attack on Titan": "attack-on-titan-aot"
-    };
-    anime.related.forEach(rTitle => {
-      const rImg = relatedImgs[rTitle] || rTitle.toLowerCase().replace(/\s/g, '-');
-      const rData = animeDB[rTitle] || { genre: 'Action', eps: 24, rating: '8.5' };
-      const el = document.createElement('a');
-      el.href = `anime.html?title=${encodeURIComponent(rTitle)}&genre=${rData.genre || 'Action'}&eps=${rData.eps || 24}&rating=${rData.rating || 8.5}&img=${rImg}`;
-      el.className = 'flex-shrink-0 w-[170px] md:w-[190px] group cursor-pointer block';
-      el.innerHTML = `
-        <div class="card-shine relative aspect-[2/3] rounded-xl overflow-hidden mb-3 bg-zinc-900">
-          <img src="https://picsum.photos/seed/${rImg}/380/570.jpg" alt="${rTitle}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy"/>
-          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent"></div>
-          <div class="absolute top-2.5 right-2.5 flex items-center gap-1 bg-black/50 backdrop-blur-sm rounded-full px-2 py-0.5">
-            <i data-lucide="star" class="w-3 h-3 text-yellow-400 fill-yellow-400"></i>
-            <span class="text-[11px] font-semibold">${rData.rating || 8.5}</span>
-          </div>
-          <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
-            <div class="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center scale-75 group-hover:scale-100 transition-transform duration-300">
-              <i data-lucide="play" class="w-5 h-5 text-white fill-white ml-0.5"></i>
-            </div>
-          </div>
-        </div>
-        <h3 class="text-sm font-semibold truncate">${rTitle}</h3>
-        <p class="text-xs text-zinc-500 mt-0.5">${rData.genre || 'Action'} &bull; ${rData.eps || 24} Episodes</p>
-      `;
-      relatedGrid.appendChild(el);
-    });
-
-    // Re-init lucide for dynamically added icons
     lucide.createIcons();
 
-    // ========== PETALS ==========
-    const petalsContainer = document.getElementById('petals-container');
-    for (let i = 0; i < 15; i++) {
-      const petal = document.createElement('div');
-      petal.className = 'petal';
-      const size = Math.random() * 8 + 5;
-      petal.style.cssText = `
-        left: ${Math.random() * 100 + 10}%;
-        width: ${size}px; height: ${size}px;
-        animation-duration: ${Math.random() * 6 + 9}s;
-        animation-delay: ${Math.random() * 12}s;
-        opacity: ${Math.random() * 0.4 + 0.1};
-      `;
-      petalsContainer.appendChild(petal);
+    // ===== VIDEO PLAYER LOGIC =====
+    const video = document.getElementById('videoPlayer');
+    const playerOverlay = document.getElementById('playerOverlay');
+    const bigPlayBtn = document.getElementById('bigPlayBtn');
+    const loadingSpinner = document.getElementById('loadingSpinner');
+    const progressBar = document.getElementById('progressBar');
+    const currentTimeEl = document.getElementById('currentTime');
+    const durationEl = document.getElementById('duration');
+    const volBar = document.getElementById('volBar');
+
+    // Sample video — replace with real anime video URLs
+    const sampleVideo = 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
+
+    function playEpisode(epNum) {
+      currentEp = epNum - 1;
+      const ep = episodes[currentEp];
+
+      // Update UI
+      document.getElementById('playerEpTitle').textContent = `Episode ${ep.num} — ${ep.title}`;
+
+      // Highlight active episode row
+      document.querySelectorAll('.ep-row').forEach(r => r.classList.remove('playing'));
+      const activeRow = document.getElementById(`ep-row-${ep.num}`);
+      if (activeRow) activeRow.classList.add('playing');
+
+      // Set video source — replace sampleVideo with your real video URL
+      video.src = sampleVideo;
+      video.load();
+
+      // Show player
+      playerOverlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+      bigPlayBtn.style.opacity = '1';
+      loadingSpinner.classList.remove('hidden');
+
+      // Auto play
+      video.play().then(() => {
+        bigPlayBtn.style.opacity = '0';
+        loadingSpinner.classList.add('hidden');
+        updatePlayPauseIcon();
+      }).catch(() => {
+        loadingSpinner.classList.add('hidden');
+        bigPlayBtn.style.opacity = '1';
+      });
+
+      // Show/hide next button
+      const nextBtn = document.getElementById('nextEpBtn');
+      if (epNum < episodes.length) {
+        nextBtn.style.display = 'flex';
+      } else {
+        nextBtn.style.display = 'none';
+      }
+
+      // Scroll to episode row
+      if (activeRow) {
+        activeRow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
     }
 
-    // ========== TABS ==========
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        // Deactivate all
-        document.querySelectorAll('.tab-btn').forEach(b => {
-          b.classList.remove('active');
-          b.style.color = '';
-          b.style.borderColor = 'transparent';
-        });
-        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-        // Activate clicked
-        btn.classList.add('active');
-        btn.style.color = '#f43f5e';
-        btn.style.borderColor = '#e11d48';
-        const tabId = 'tab-' + btn.dataset.tab;
-        document.getElementById(tabId).classList.add('active');
-      });
+    function closePlayer() {
+      video.pause();
+      playerOverlay.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function togglePlay() {
+      if (video.paused) {
+        video.play();
+        bigPlayBtn.style.opacity = '0';
+      } else {
+        video.pause();
+        bigPlayBtn.style.opacity = '1';
+      }
+      updatePlayPauseIcon();
+    }
+
+    function updatePlayPauseIcon() {
+      const icon = document.getElementById('playPauseIcon');
+      if (video.paused) {
+        icon.setAttribute('data-lucide', 'play');
+      } else {
+        icon.setAttribute('data-lucide', 'pause');
+      }
+      lucide.createIcons();
+    }
+
+    function skipTime(seconds) {
+      video.currentTime = Math.max(0, Math.min(video.duration || 0, video.currentTime + seconds));
+    }
+
+    function seekVideo(value) {
+      if (video.duration) {
+        video.currentTime = (value / 100) * video.duration;
+      }
+    }
+
+    function setVolume(value) {
+      video.volume = value / 100;
+      updateVolIcon();
+    }
+
+    function toggleMute() {
+      video.muted = !video.muted;
+      if (video.muted) {
+        volBar.value = 0;
+      } else {
+        volBar.value = video.volume * 100;
+      }
+      updateVolIcon();
+    }
+
+    function updateVolIcon() {
+      const icon = document.getElementById('volIcon');
+      if (video.muted || video.volume === 0) {
+        icon.setAttribute('data-lucide', 'volume-x');
+      } else if (video.volume < 0.5) {
+        icon.setAttribute('data-lucide', 'volume-1');
+      } else {
+        icon.setAttribute('data-lucide', 'volume-2');
+      }
+      lucide.createIcons();
+    }
+
+    function toggleSubtitles() {
+      const btn = document.getElementById('subBtn');
+      if (video.textTracks.length > 0) {
+        const track = video.textTracks[0];
+        track.mode = track.mode === 'showing' ? 'hidden' : 'showing';
+        btn.classList.toggle('text-rose-400');
+        btn.classList.toggle('text-zinc-400');
+      } else {
+        showToast('Subtitles not available for this source');
+      }
+    }
+
+    function setQuality(q) {
+      showToast(`Switched to ${q} (requires video source support)`);
+    }
+
+    function toggleFullscreen() {
+      const container = video.closest('.aspect-video');
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+      } else {
+        container.requestFullscreen().catch(() => {});
+      }
+    }
+
+    function playNextEp() {
+      if (currentEp < episodes.length - 1) {
+        playEpisode(currentEp + 2); // +2 because epNum = currentEp + 1
+      }
+    }
+
+    // Video events
+    video.addEventListener('timeupdate', () => {
+      if (video.duration) {
+        const pct = (video.currentTime / video.duration) * 100;
+        progressBar.value = pct;
+        currentTimeEl.textContent = formatTime(video.currentTime);
+        durationEl.textContent = formatTime(video.duration);
+      }
     });
 
-    // ========== NAVBAR SCROLL ==========
+    video.addEventListener('ended', () => {
+      if (currentEp < episodes.length - 1) {
+        playNextEp();
+      } else {
+        bigPlayBtn.style.opacity = '1';
+        updatePlayPauseIcon();
+        showToast('You\'ve watched all episodes!');
+      }
+    });
+
+    video.addEventListener('waiting', () => { loadingSpinner.classList.remove('hidden'); });
+    video.addEventListener('playing', () => { loadingSpinner.classList.add('hidden'); bigPlayBtn.style.opacity = '0'; });
+    video.addEventListener('pause', () => { bigPlayBtn.style.opacity = '1'; updatePlayPauseIcon(); });
+
+    // Set initial volume
+    video.volume = 0.8;
+
+    function formatTime(s) {
+      if (isNaN(s)) return '0:00';
+      const m = Math.floor(s / 60);
+      const sec = Math.floor(s % 60);
+      return `${m}:${String(sec).padStart(2, '0')}`;
+    }
+
+    // ===== MY LIST TOGGLE =====
+    let inList = false;
+    function toggleMyList() {
+      inList = !inList;
+      const icon = document.getElementById('listIcon');
+      const text = document.getElementById('listText');
+      const btn = document.getElementById('addListBtn');
+      if (inList) {
+        icon.setAttribute('data-lucide', 'check');
+        text.textContent = 'Added!';
+        btn.classList.add('border-emerald-500/30', 'bg-emerald-500/10');
+        btn.classList.remove('border-white/10', 'bg-white/5');
+        showToast('Demon Slayer added to your list');
+      } else {
+        icon.setAttribute('data-lucide', 'plus');
+        text.textContent = 'My List';
+        btn.classList.remove('border-emerald-500/30', 'bg-emerald-500/10');
+        btn.classList.add('border-white/10', 'bg-white/5');
+        showToast('Demon Slayer removed from your list');
+      }
+      lucide.createIcons();
+    }
+
+    // ===== COPY LINK =====
+    function copyLink() {
+      navigator.clipboard.writeText(window.location.href).then(() => {
+        showToast('Link copied to clipboard!');
+      }).catch(() => {
+        showToast('Link copied!');
+      });
+    }
+
+    // ===== TOAST =====
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastMsg').textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+    // ===== NAVBAR SCROLL =====
     const navbar = document.getElementById('navbar');
     window.addEventListener('scroll', () => {
       if (window.scrollY > 60) {
@@ -681,91 +728,66 @@
       }
     });
 
-    // ========== SEARCH ==========
-    const searchBtn = document.getElementById('searchBtn');
-    const searchOverlay = document.getElementById('searchOverlay');
-    const closeSearch = document.getElementById('closeSearch');
-    const searchInput = document.getElementById('searchInput');
-
-    searchBtn.addEventListener('click', () => { searchOverlay.classList.add('active'); setTimeout(() => searchInput.focus(), 100); });
-    closeSearch.addEventListener('click', () => { searchOverlay.classList.remove('active'); searchInput.value = ''; });
-    searchOverlay.addEventListener('click', (e) => { if (e.target === searchOverlay) { searchOverlay.classList.remove('active'); searchInput.value = ''; } });
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && searchOverlay.classList.contains('active')) { searchOverlay.classList.remove('active'); searchInput.value = ''; }
-      if ((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault(); searchOverlay.classList.add('active'); setTimeout(() => searchInput.focus(), 100); }
+    // ===== SEARCH =====
+    document.getElementById('searchBtn').addEventListener('click', () => {
+      document.getElementById('searchOverlay').classList.add('active');
     });
 
-    // ========== MOBILE MENU ==========
-    document.getElementById('mobileMenuBtn').addEventListener('click', () => {
-      document.getElementById('mobileMenu').classList.toggle('hidden');
-    });
-
-    // ========== TOAST ==========
-    function showToast(msg) {
-      const toast = document.getElementById('toast');
-      document.getElementById('toastMsg').textContent = msg;
-      toast.style.transform = 'translateY(0)';
-      toast.style.opacity = '1';
-      toast.style.pointerEvents = 'auto';
-      setTimeout(() => {
-        toast.style.transform = 'translateY(20px)';
-        toast.style.opacity = '0';
-        toast.style.pointerEvents = 'none';
-      }, 2500);
+    // ===== PETALS =====
+    const petalsContainer = document.getElementById('petals-container');
+    for (let i = 0; i < 15; i++) {
+      const petal = document.createElement('div');
+      petal.className = 'petal';
+      const size = Math.random() * 8 + 5;
+      petal.style.cssText = `left:${Math.random()*100+10}%;width:${size}px;height:${size}px;animation-duration:${Math.random()*6+9}s;animation-delay:${Math.random()*12}s;opacity:${Math.random()*0.4+0.1};`;
+      petalsContainer.appendChild(petal);
     }
 
-    // ========== BUTTON ACTIONS ==========
-    document.getElementById('addListBtn').addEventListener('click', function() {
-      const icon = this.querySelector('[data-lucide]');
-      const span = this.querySelector('span');
-      if (span.textContent === 'My List') {
-        span.textContent = 'Added!';
-        icon.setAttribute('data-lucide', 'check');
-        this.classList.add('border-emerald-500/30', 'bg-emerald-500/10');
-        this.classList.remove('border-white/10', 'bg-white/5');
-        showToast(`${title} added to your list`);
-      } else {
-        span.textContent = 'My List';
-        icon.setAttribute('data-lucide', 'plus');
-        this.classList.remove('border-emerald-500/30', 'bg-emerald-500/10');
-        this.classList.add('border-white/10', 'bg-white/5');
-        showToast(`${title} removed from your list`);
+    // ===== KEYBOARD SHORTCUTS =====
+    document.addEventListener('keydown', (e) => {
+      // Only work when player is open
+      if (!playerOverlay.classList.contains('active')) return;
+
+      switch(e.key) {
+        case ' ':
+        case 'k':
+          e.preventDefault();
+          togglePlay();
+          break;
+        case 'ArrowLeft':
+          e.preventDefault();
+          skipTime(-10);
+          break;
+        case 'ArrowRight':
+          e.preventDefault();
+          skipTime(10);
+          break;
+        case 'ArrowUp':
+          e.preventDefault();
+          video.volume = Math.min(1, video.volume + 0.1);
+          volBar.value = video.volume * 100;
+          updateVolIcon();
+          break;
+        case 'ArrowDown':
+          e.preventDefault();
+          video.volume = Math.max(0, video.volume - 0.1);
+          volBar.value = video.volume * 100;
+          updateVolIcon();
+          break;
+        case 'f':
+          toggleFullscreen();
+          break;
+        case 'm':
+          toggleMute();
+          break;
+        case 'Escape':
+          closePlayer();
+          break;
+        case 'n':
+          playNextEp();
+          break;
       }
-      lucide.createIcons();
     });
-
-    document.getElementById('shareBtn').addEventListener('click', () => {
-      navigator.clipboard.writeText(window.location.href).then(() => {
-        showToast('Link copied to clipboard!');
-      }).catch(() => {
-        showToast('Link copied!');
-      });
-    });
-
-    document.getElementById('playBtn').addEventListener('click', () => {
-      // Scroll to episodes tab and play first episode
-      document.querySelectorAll('.tab-btn').forEach(b => {
-        b.classList.remove('active');
-        b.style.color = '';
-        b.style.borderColor = 'transparent';
-      });
-      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-      const epTab = document.querySelector('[data-tab="episodes"]');
-      epTab.classList.add('active');
-      epTab.style.color = '#f43f5e';
-      epTab.style.borderColor = '#e11d48';
-      document.getElementById('tab-episodes').classList.add('active');
-      document.getElementById('tab-episodes').scrollIntoView({ behavior: 'smooth', block: 'start' });
-      showToast('Now playing Episode 1');
-    });
-
-    // ========== SCROLL REVEAL ==========
-    const revealObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add('visible');
-      });
-    }, { threshold: 0.1 });
-    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
   </script>
 
 </body>
